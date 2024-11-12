@@ -5,37 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday 魔魔 💝</title>
     <style>
-        /* Base styles */
-        :root {
-            --primary-color: #e74c3c;
-            --secondary-color: #3498db;
-            --text-color: #2c3e50;
-            --bg-color: #f5f7fa;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        }
-
+        /* 基础样式 */
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
-            background: linear-gradient(135deg, var(--bg-color) 0%, #c3cfe2 100%);
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
-            color: var(--text-color);
+            color: #2c3e50;
         }
 
-        /* Loading screen */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        /* 加载页面 */
         .loading-screen {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: white;
-            display: grid;
-            place-items: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             z-index: 9999;
-            transition: opacity 0.5s ease-in-out;
         }
 
         .loading-heart {
-            font-size: 4rem;
+            font-size: 48px;
             animation: heartbeat 1.5s infinite;
         }
 
@@ -44,241 +45,165 @@
             50% { transform: scale(1.2); }
         }
 
-        /* Main container */
-        .container {
-            max-width: min(1200px, 90vw);
-            margin: 2rem auto;
-            padding: 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
-        }
-
-        /* Header section */
-        .header {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 3rem 2rem;
-            border-radius: 1rem;
-            box-shadow: var(--shadow);
-        }
-
+        /* 主要内容区域 */
         h1 {
-            font-size: clamp(2rem, 5vw, 3rem);
-            color: var(--primary-color);
-            margin: 0;
-            animation: fadeInDown 1s ease-out;
+            text-align: center;
+            color: #e74c3c;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
 
         .subtitle {
-            font-size: clamp(1rem, 3vw, 1.2rem);
-            color: #666;
-            margin-top: 1rem;
-            animation: fadeIn 1.5s ease-out;
+            text-align: center;
+            color: #7f8c8d;
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
         }
 
-        /* Video section */
         .section {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 1rem;
+            background: white;
+            border-radius: 15px;
             padding: 2rem;
-            box-shadow: var(--shadow);
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
+        /* 视频区域 */
         .video-container {
             position: relative;
             padding-bottom: 56.25%;
-            border-radius: 0.5rem;
+            height: 0;
             overflow: hidden;
-            background: #000;
+            border-radius: 10px;
         }
 
-        video {
+        .video-container video {
             position: absolute;
-            inset: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover;
         }
 
-        /* Progress bar */
+        /* 进度条 */
         .progress-container {
             width: 100%;
             height: 5px;
             background: #eee;
-            border-radius: 5px;
             margin: 1rem 0;
+            border-radius: 5px;
             cursor: pointer;
-            position: relative;
         }
 
         .progress-bar {
             height: 100%;
-            background: var(--primary-color);
+            background: #e74c3c;
             border-radius: 5px;
             width: 0;
             transition: width 0.1s linear;
         }
 
-        /* Controls */
+        .time-display {
+            text-align: center;
+            margin: 0.5rem 0;
+            color: #666;
+        }
+
+        /* 控制按钮 */
         .video-controls {
             display: flex;
-            gap: 1rem;
             justify-content: center;
+            gap: 1rem;
             margin-top: 1rem;
         }
 
-        .control-btn {
+        .video-controls button {
             padding: 0.5rem 1.5rem;
             border: none;
-            border-radius: 0.5rem;
-            background: var(--primary-color);
+            border-radius: 5px;
+            background: #e74c3c;
             color: white;
             cursor: pointer;
-            transition: transform 0.2s ease, background-color 0.2s ease;
+            transition: all 0.3s ease;
         }
 
-        .control-btn:hover {
-            transform: translateY(-2px);
+        .video-controls button:hover {
             background: #c0392b;
+            transform: translateY(-2px);
         }
 
-        /* BGM control */
+        /* 背景音乐控制 */
         .bgm-control {
             position: fixed;
-            right: 2rem;
-            top: 2rem;
-            width: 3rem;
-            height: 3rem;
+            right: 20px;
+            top: 20px;
+            width: 40px;
+            height: 40px;
             background: white;
             border-radius: 50%;
-            display: grid;
-            place-items: center;
-            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             cursor: pointer;
-            transition: transform 0.3s ease;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
             z-index: 100;
         }
 
-        .bgm-control:hover {
-            transform: scale(1.1);
-        }
-
-        .bgm-control.playing {
-            animation: rotate 5s linear infinite;
-        }
-
-        /* Danmaku */
+        /* 弹幕区域 */
         .danmaku-container {
             position: fixed;
-            inset: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             pointer-events: none;
-            z-index: 50;
-            overflow: hidden;
-        }
-
-        .danmaku {
-            position: absolute;
-            white-space: nowrap;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
-            font-size: clamp(1rem, 3vw, 1.5rem);
-            animation: danmakuMove linear;
+            z-index: 99;
         }
 
         .danmaku-input-area {
             position: fixed;
-            bottom: 2rem;
+            bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 0.5rem;
-            background: white;
-            padding: 0.75rem;
-            border-radius: 2rem;
-            box-shadow: var(--shadow);
+            gap: 10px;
             z-index: 100;
+            background: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
-        .danmaku-input {
-            padding: 0.5rem 1rem;
+        .danmaku-input-area input {
+            padding: 5px 10px;
             border: 1px solid #ddd;
-            border-radius: 1rem;
+            border-radius: 15px;
             outline: none;
-            width: min(300px, 50vw);
-            font-size: 1rem;
+            width: 200px;
         }
 
-        .danmaku-input:focus {
-            border-color: var(--primary-color);
-        }
-
-        @keyframes rotate {
-            to { transform: rotate(360deg); }
-        }
-
-        @keyframes danmakuMove {
-            from { transform: translateX(100vw); }
-            to { transform: translateX(-100%); }
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Responsive design */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-                margin: 1rem auto;
-            }
-
-            .section {
-                padding: 1rem;
-            }
-
-            .danmaku-input-area {
-                bottom: 1rem;
-                padding: 0.5rem;
-            }
-
-            .bgm-control {
-                right: 1rem;
-                top: 1rem;
-                width: 2.5rem;
-                height: 2.5rem;
-            }
+        .danmaku-input-area button {
+            padding: 5px 15px;
+            border: none;
+            border-radius: 15px;
+            background: #e74c3c;
+            color: white;
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-    <!-- Loading Screen -->
+    <!-- 加载动画 -->
     <div class="loading-screen">
         <div class="loading-heart">❤️</div>
     </div>
 
-    <!-- Main Container -->
+    <!-- 主要内容 -->
     <div class="container">
-        <!-- Header -->
-        <header class="header">
-            <h1>Happy Birthday 魔魔 <span class="heart">❤️</span></h1>
-            <div class="subtitle">愿你的23岁充满爱与欢乐</div>
-        </header>
+        <h1>Happy Birthday 魔魔 <span class="heart">❤️</span></h1>
+        <div class="subtitle">愿你的23岁充满爱与欢乐</div>
 
-        <!-- Video Section -->
-        <section class="section">
+        <div class="section">
             <h2>给你的生日祝福视频 <span class="heart">💝</span></h2>
             <div class="video-container">
                 <video id="birthdayVideo" preload="metadata">
@@ -286,41 +211,113 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
-            
-            <div class="progress-container" id="videoProgress">
+
+            <div id="videoProgress" class="progress-container">
                 <div class="progress-bar"></div>
             </div>
-            
+
             <div class="time-display">
                 <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
             </div>
-            
+
             <div class="video-controls">
-                <button class="control-btn" id="playPauseBtn">播放</button>
-                <button class="control-btn" id="fullscreenBtn">全屏</button>
+                <button onclick="togglePlay()">播放</button>
+                <button onclick="toggleFullscreen()">全屏</button>
             </div>
-        </section>
+        </div>
     </div>
 
-    <!-- BGM Control -->
-    <div class="bgm-control" id="bgmControl" title="背景音乐">
+    <!-- 背景音乐控制 -->
+    <div id="bgmControl" class="bgm-control" title="背景音乐">
         🎵
     </div>
 
-    <!-- Danmaku Container -->
-    <div class="danmaku-container" id="danmakuContainer"></div>
+    <!-- 弹幕容器 -->
+    <div id="danmakuContainer" class="danmaku-container"></div>
 
-    <!-- Danmaku Input -->
+    <!-- 弹幕输入区域 -->
     <div class="danmaku-input-area">
-        <input type="text" class="danmaku-input" id="danmakuInput" placeholder="发送祝福弹幕...">
-        <button class="control-btn" id="sendDanmaku">发送</button>
+        <input type="text" id="danmakuInput" placeholder="发送祝福弹幕...">
+        <button onclick="sendDanmaku()">发送</button>
     </div>
 
-    <!-- Background Music -->
-    <audio id="bgm" loop>
-        <source src="assets/media/audio/background-music.mp3" type="audio/mpeg">
-    </audio>
+    <script>
+        // 在页面加载完成后移除加载动画
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                document.querySelector('.loading-screen').style.display = 'none';
+            }, 1500);
+        });
 
-    <!-- Scripts in previous response remain the same -->
+        // 视频控制
+        const video = document.getElementById('birthdayVideo');
+        const progressBar = document.querySelector('.progress-bar');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+
+        function togglePlay() {
+            if (video.paused) {
+                video.play();
+            } else {
+                video.pause();
+            }
+        }
+
+        function toggleFullscreen() {
+            if (!document.fullscreenElement) {
+                video.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // 更新进度条
+        video.addEventListener('timeupdate', function() {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeSpan.textContent = formatTime(video.currentTime);
+        });
+
+        // 格式化时间
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 弹幕系统
+        function sendDanmaku() {
+            const input = document.getElementById('danmakuInput');
+            const text = input.value.trim();
+            if (text) {
+                createDanmaku(text);
+                input.value = '';
+            }
+        }
+
+        function createDanmaku(text) {
+            const danmaku = document.createElement('div');
+            danmaku.textContent = text;
+            danmaku.style.position = 'absolute';
+            danmaku.style.left = '100%';
+            danmaku.style.top = Math.random() * (window.innerHeight - 50) + 'px';
+            danmaku.style.color = `hsl(${Math.random() * 360}, 70%, 70%)`;
+            danmaku.style.whiteSpace = 'nowrap';
+            danmaku.style.animation = 'danmakuMove 8s linear';
+            
+            document.getElementById('danmakuContainer').appendChild(danmaku);
+            
+            danmaku.addEventListener('animationend', () => {
+                danmaku.remove();
+            });
+        }
+
+        // 回车发送弹幕
+        document.getElementById('danmakuInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendDanmaku();
+            }
+        });
+    </script>
 </body>
 </html>
