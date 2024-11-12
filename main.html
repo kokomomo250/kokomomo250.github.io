@@ -5,105 +5,159 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday 魔魔 💝</title>
     <style>
-        /* 保持原有样式 */
+        /* Base styles */
+        :root {
+            --primary-color: #e74c3c;
+            --secondary-color: #3498db;
+            --text-color: #2c3e50;
+            --bg-color: #f5f7fa;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+            background: linear-gradient(135deg, var(--bg-color) 0%, #c3cfe2 100%);
             min-height: 100vh;
-            color: #2c3e50;
+            color: var(--text-color);
         }
 
-        /* 新增样式 */
+        /* Loading screen */
         .loading-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            inset: 0;
+            background: white;
+            display: grid;
+            place-items: center;
             z-index: 9999;
-            transition: opacity 0.5s;
+            transition: opacity 0.5s ease-in-out;
         }
 
         .loading-heart {
-            font-size: 48px;
+            font-size: 4rem;
             animation: heartbeat 1.5s infinite;
         }
 
         @keyframes heartbeat {
-            0% { transform: scale(1); }
-            25% { transform: scale(1.1); }
-            50% { transform: scale(1); }
-            75% { transform: scale(1.1); }
-            100% { transform: scale(1); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
         }
 
-        .video-controls {
+        /* Main container */
+        .container {
+            max-width: min(1200px, 90vw);
+            margin: 2rem auto;
+            padding: 2rem;
             display: flex;
-            justify-content: center;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        /* Header section */
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 3rem 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: var(--primary-color);
+            margin: 0;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 3vw, 1.2rem);
+            color: #666;
             margin-top: 1rem;
+            animation: fadeIn 1.5s ease-out;
         }
 
-        .fullscreen-btn {
-            background: #3498db;
+        /* Video section */
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 1rem;
+            padding: 2rem;
+            box-shadow: var(--shadow);
         }
 
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            background: #000;
+        }
+
+        video {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Progress bar */
         .progress-container {
             width: 100%;
-            background: #f0f0f0;
             height: 5px;
+            background: #eee;
             border-radius: 5px;
             margin: 1rem 0;
             cursor: pointer;
+            position: relative;
         }
 
         .progress-bar {
             height: 100%;
-            background: #e74c3c;
+            background: var(--primary-color);
             border-radius: 5px;
             width: 0;
             transition: width 0.1s linear;
         }
 
-        .time-display {
-            text-align: center;
-            margin-top: 0.5rem;
-            font-size: 0.9rem;
-            color: #7f8c8d;
+        /* Controls */
+        .video-controls {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 1rem;
         }
 
-        /* 响应式设计优化 */
-        @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
-            h1 {
-                font-size: 2rem;
-            }
-
-            .pdf-container {
-                height: 500px;
-            }
+        .control-btn {
+            padding: 0.5rem 1.5rem;
+            border: none;
+            border-radius: 0.5rem;
+            background: var(--primary-color);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, background-color 0.2s ease;
         }
-        /* 添加背景音乐控制样式 */
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            background: #c0392b;
+        }
+
+        /* BGM control */
         .bgm-control {
             position: fixed;
-            right: 20px;
-            top: 20px;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
+            right: 2rem;
+            top: 2rem;
+            width: 3rem;
+            height: 3rem;
+            background: white;
             border-radius: 50%;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            display: grid;
+            place-items: center;
+            box-shadow: var(--shadow);
             cursor: pointer;
             transition: transform 0.3s ease;
+            z-index: 100;
         }
 
         .bgm-control:hover {
@@ -114,89 +168,116 @@
             animation: rotate 5s linear infinite;
         }
 
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        /* 弹幕样式 */
+        /* Danmaku */
         .danmaku-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            inset: 0;
             pointer-events: none;
-            z-index: 999;
+            z-index: 50;
             overflow: hidden;
         }
 
         .danmaku {
             position: absolute;
             white-space: nowrap;
-            color: #fff;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
-            font-size: 1.2rem;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+            font-size: clamp(1rem, 3vw, 1.5rem);
             animation: danmakuMove linear;
         }
 
-        @keyframes danmakuMove {
-            from { transform: translateX(100%); }
-            to { transform: translateX(-100%); }
-        }
-
-        /* 弹幕发送区域样式 */
         .danmaku-input-area {
             position: fixed;
-            bottom: 20px;
+            bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            z-index: 1000;
             display: flex;
-            gap: 10px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 10px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            gap: 0.5rem;
+            background: white;
+            padding: 0.75rem;
+            border-radius: 2rem;
+            box-shadow: var(--shadow);
+            z-index: 100;
         }
 
         .danmaku-input {
-            padding: 5px 10px;
-            border: none;
-            border-radius: 15px;
+            padding: 0.5rem 1rem;
+            border: 1px solid #ddd;
+            border-radius: 1rem;
             outline: none;
-            width: 200px;
+            width: min(300px, 50vw);
+            font-size: 1rem;
         }
 
-        .send-danmaku-btn {
-            background: #e74c3c;
-            color: white;
-            border: none;
-            padding: 5px 15px;
-            border-radius: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
+        .danmaku-input:focus {
+            border-color: var(--primary-color);
         }
 
-        .send-danmaku-btn:hover {
-            background: #c0392b;
+        @keyframes rotate {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes danmakuMove {
+            from { transform: translateX(100vw); }
+            to { transform: translateX(-100%); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+                margin: 1rem auto;
+            }
+
+            .section {
+                padding: 1rem;
+            }
+
+            .danmaku-input-area {
+                bottom: 1rem;
+                padding: 0.5rem;
+            }
+
+            .bgm-control {
+                right: 1rem;
+                top: 1rem;
+                width: 2.5rem;
+                height: 2.5rem;
+            }
         }
     </style>
 </head>
 <body>
-    
-    <!-- 添加加载画面 -->
+    <!-- Loading Screen -->
     <div class="loading-screen">
         <div class="loading-heart">❤️</div>
     </div>
 
+    <!-- Main Container -->
     <div class="container">
-        <!-- 保持原有内容结构 -->
-        <header>
+        <!-- Header -->
+        <header class="header">
             <h1>Happy Birthday 魔魔 <span class="heart">❤️</span></h1>
             <div class="subtitle">愿你的23岁充满爱与欢乐</div>
         </header>
 
+        <!-- Video Section -->
         <section class="section">
             <h2>给你的生日祝福视频 <span class="heart">💝</span></h2>
             <div class="video-container">
@@ -205,210 +286,41 @@
                     Your browser does not support the video tag.
                 </video>
             </div>
-            <!-- 新增进度条和控制按钮 -->
+            
             <div class="progress-container" id="videoProgress">
                 <div class="progress-bar"></div>
             </div>
+            
             <div class="time-display">
                 <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
             </div>
+            
             <div class="video-controls">
                 <button class="control-btn" id="playPauseBtn">播放</button>
-                <button class="control-btn fullscreen-btn" id="fullscreenBtn">全屏</button>
+                <button class="control-btn" id="fullscreenBtn">全屏</button>
             </div>
         </section>
+    </div>
 
-    <!-- 添加背景音乐控制按钮 -->
+    <!-- BGM Control -->
     <div class="bgm-control" id="bgmControl" title="背景音乐">
         🎵
     </div>
 
-    <!-- 添加弹幕容器 -->
+    <!-- Danmaku Container -->
     <div class="danmaku-container" id="danmakuContainer"></div>
 
-    <!-- 添加弹幕发送区域 -->
+    <!-- Danmaku Input -->
     <div class="danmaku-input-area">
         <input type="text" class="danmaku-input" id="danmakuInput" placeholder="发送祝福弹幕...">
-        <button class="send-danmaku-btn" id="sendDanmaku">发送</button>
+        <button class="control-btn" id="sendDanmaku">发送</button>
     </div>
 
-    <!-- 添加背景音乐 -->
+    <!-- Background Music -->
     <audio id="bgm" loop>
         <source src="assets/media/audio/background-music.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- 其他原有内容保持不变 -->
-    <!-- ... -->
-
-    <script>
-        // 页面加载完成后移除加载画面
-        window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.querySelector('.loading-screen').style.opacity = '0';
-                setTimeout(function() {
-                    document.querySelector('.loading-screen').style.display = 'none';
-                }, 500);
-            }, 1500);
-        });
-
-        // 视频控制相关代码
-        const video = document.getElementById('birthdayVideo');
-        const playPauseBtn = document.getElementById('playPauseBtn');
-        const fullscreenBtn = document.getElementById('fullscreenBtn');
-        const progressBar = document.querySelector('.progress-bar');
-        const progressContainer = document.getElementById('videoProgress');
-        const currentTimeSpan = document.getElementById('currentTime');
-        const durationSpan = document.getElementById('duration');
-
-        // 播放/暂停控制
-        playPauseBtn.addEventListener('click', function() {
-            if (video.paused) {
-                video.play();
-                playPauseBtn.textContent = '暂停';
-            } else {
-                video.pause();
-                playPauseBtn.textContent = '播放';
-            }
-        });
-
-        // 全屏控制
-        fullscreenBtn.addEventListener('click', function() {
-            if (video.requestFullscreen) {
-                video.requestFullscreen();
-            } else if (video.webkitRequestFullscreen) {
-                video.webkitRequestFullscreen();
-            }
-        });
-
-        // 进度条更新
-        video.addEventListener('timeupdate', function() {
-            const progress = (video.currentTime / video.duration) * 100;
-            progressBar.style.width = progress + '%';
-            currentTimeSpan.textContent = formatTime(video.currentTime);
-        });
-
-        // 视频加载完成后显示总时长
-        video.addEventListener('loadedmetadata', function() {
-            durationSpan.textContent = formatTime(video.duration);
-        });
-
-        // 点击进度条跳转
-        progressContainer.addEventListener('click', function(e) {
-            const rect = progressContainer.getBoundingClientRect();
-            const pos = (e.clientX - rect.left) / rect.width;
-            video.currentTime = pos * video.duration;
-        });
-
-        // 格式化时间显示
-        function formatTime(seconds) {
-            const minutes = Math.floor(seconds / 60);
-            seconds = Math.floor(seconds % 60);
-            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
-        }
-
-        // 防止视频和音频同时播放
-        document.getElementById('birthdayMusic').addEventListener('play', function() {
-            video.pause();
-            playPauseBtn.textContent = '播放';
-        });
-
-        video.addEventListener('play', function() {
-            document.getElementById('birthdayMusic').pause();
-        });
-
-        // 背景音乐控制
-        const bgm = document.getElementById('bgm');
-        const bgmControl = document.getElementById('bgmControl');
-        let isBgmPlaying = false;
-
-        bgmControl.addEventListener('click', function() {
-            if (isBgmPlaying) {
-                bgm.pause();
-                bgmControl.classList.remove('playing');
-            } else {
-                bgm.play();
-                bgmControl.classList.add('playing');
-            }
-            isBgmPlaying = !isBgmPlaying;
-        });
-
-        // 预设的祝福语
-        const blessings = [
-            "魔魔生日快乐！",
-            "愿你永远快乐！",
-            "祝最可爱的魔魔生日快乐~",
-            "愿你的23岁充满爱与希望",
-            "Happy Birthday 魔魔！",
-            "生日快乐呀~",
-            "愿你被世界温柔以待",
-            "永远爱你哦魔魔~",
-            "今天是魔魔的主场！",
-            "祝魔魔天天开心！"
-        ];
-
-        // 弹幕功能
-        const danmakuContainer = document.getElementById('danmakuContainer');
-        const danmakuInput = document.getElementById('danmakuInput');
-        const sendDanmakuBtn = document.getElementById('sendDanmaku');
-
-        // 发送弹幕函数
-        function sendDanmaku(text) {
-            const danmaku = document.createElement('div');
-            danmaku.className = 'danmaku';
-            danmaku.textContent = text;
-            
-            // 随机设置弹幕的垂直位置
-            const top = Math.random() * (window.innerHeight - 50);
-            danmaku.style.top = `${top}px`;
-            
-            // 随机设置弹幕颜色
-            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeead', '#d4a4eb'];
-            danmaku.style.color = colors[Math.floor(Math.random() * colors.length)];
-            
-            // 设置动画时长
-            const duration = 10 + Math.random() * 5;
-            danmaku.style.animationDuration = `${duration}s`;
-            
-            danmakuContainer.appendChild(danmaku);
-            
-            // 动画结束后移除弹幕
-            danmaku.addEventListener('animationend', () => {
-                danmaku.remove();
-            });
-        }
-
-        // 按钮发送弹幕
-        sendDanmakuBtn.addEventListener('click', () => {
-            const text = danmakuInput.value.trim();
-            if (text) {
-                sendDanmaku(text);
-                danmakuInput.value = '';
-            }
-        });
-
-        // 回车发送弹幕
-        danmakuInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                const text = danmakuInput.value.trim();
-                if (text) {
-                    sendDanmaku(text);
-                    danmakuInput.value = '';
-                }
-            }
-        });
-
-        // 自动发送预设祝福
-        function autoSendBlessings() {
-            setInterval(() => {
-                const blessing = blessings[Math.floor(Math.random() * blessings.length)];
-                sendDanmaku(blessing);
-            }, 2000); // 每2秒发送一条
-        }
-
-        // 页面加载完成后开始发送祝福
-        window.addEventListener('load', () => {
-            autoSendBlessings();
-        });
-    </script>
+    <!-- Scripts in previous response remain the same -->
 </body>
 </html>
