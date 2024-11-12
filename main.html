@@ -6,8 +6,92 @@
     <title>Happy Birthday 魔魔 💝</title>
     <style>
         /* 保持原有样式 */
-        /* ... [之前的样式保持不变] ... */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            color: #2c3e50;
+        }
 
+        /* 新增样式 */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s;
+        }
+
+        .loading-heart {
+            font-size: 48px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .video-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .fullscreen-btn {
+            background: #3498db;
+        }
+
+        .progress-container {
+            width: 100%;
+            background: #f0f0f0;
+            height: 5px;
+            border-radius: 5px;
+            margin: 1rem 0;
+            cursor: pointer;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: #e74c3c;
+            border-radius: 5px;
+            width: 0;
+            transition: width 0.1s linear;
+        }
+
+        .time-display {
+            text-align: center;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* 响应式设计优化 */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .pdf-container {
+                height: 500px;
+            }
+        }
         /* 添加背景音乐控制样式 */
         .bgm-control {
             position: fixed;
@@ -100,6 +184,40 @@
     </style>
 </head>
 <body>
+    
+    <!-- 添加加载画面 -->
+    <div class="loading-screen">
+        <div class="loading-heart">❤️</div>
+    </div>
+
+    <div class="container">
+        <!-- 保持原有内容结构 -->
+        <header>
+            <h1>Happy Birthday 魔魔 <span class="heart">❤️</span></h1>
+            <div class="subtitle">愿你的23岁充满爱与欢乐</div>
+        </header>
+
+        <section class="section">
+            <h2>给你的生日祝福视频 <span class="heart">💝</span></h2>
+            <div class="video-container">
+                <video id="birthdayVideo" preload="metadata">
+                    <source src="assets/media/video/birthday-video.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <!-- 新增进度条和控制按钮 -->
+            <div class="progress-container" id="videoProgress">
+                <div class="progress-bar"></div>
+            </div>
+            <div class="time-display">
+                <span id="currentTime">0:00</span> / <span id="duration">0:00</span>
+            </div>
+            <div class="video-controls">
+                <button class="control-btn" id="playPauseBtn">播放</button>
+                <button class="control-btn fullscreen-btn" id="fullscreenBtn">全屏</button>
+            </div>
+        </section>
+
     <!-- 添加背景音乐控制按钮 -->
     <div class="bgm-control" id="bgmControl" title="背景音乐">
         🎵
@@ -123,6 +241,81 @@
     <!-- ... -->
 
     <script>
+        // 页面加载完成后移除加载画面
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                document.querySelector('.loading-screen').style.opacity = '0';
+                setTimeout(function() {
+                    document.querySelector('.loading-screen').style.display = 'none';
+                }, 500);
+            }, 1500);
+        });
+
+        // 视频控制相关代码
+        const video = document.getElementById('birthdayVideo');
+        const playPauseBtn = document.getElementById('playPauseBtn');
+        const fullscreenBtn = document.getElementById('fullscreenBtn');
+        const progressBar = document.querySelector('.progress-bar');
+        const progressContainer = document.getElementById('videoProgress');
+        const currentTimeSpan = document.getElementById('currentTime');
+        const durationSpan = document.getElementById('duration');
+
+        // 播放/暂停控制
+        playPauseBtn.addEventListener('click', function() {
+            if (video.paused) {
+                video.play();
+                playPauseBtn.textContent = '暂停';
+            } else {
+                video.pause();
+                playPauseBtn.textContent = '播放';
+            }
+        });
+
+        // 全屏控制
+        fullscreenBtn.addEventListener('click', function() {
+            if (video.requestFullscreen) {
+                video.requestFullscreen();
+            } else if (video.webkitRequestFullscreen) {
+                video.webkitRequestFullscreen();
+            }
+        });
+
+        // 进度条更新
+        video.addEventListener('timeupdate', function() {
+            const progress = (video.currentTime / video.duration) * 100;
+            progressBar.style.width = progress + '%';
+            currentTimeSpan.textContent = formatTime(video.currentTime);
+        });
+
+        // 视频加载完成后显示总时长
+        video.addEventListener('loadedmetadata', function() {
+            durationSpan.textContent = formatTime(video.duration);
+        });
+
+        // 点击进度条跳转
+        progressContainer.addEventListener('click', function(e) {
+            const rect = progressContainer.getBoundingClientRect();
+            const pos = (e.clientX - rect.left) / rect.width;
+            video.currentTime = pos * video.duration;
+        });
+
+        // 格式化时间显示
+        function formatTime(seconds) {
+            const minutes = Math.floor(seconds / 60);
+            seconds = Math.floor(seconds % 60);
+            return `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // 防止视频和音频同时播放
+        document.getElementById('birthdayMusic').addEventListener('play', function() {
+            video.pause();
+            playPauseBtn.textContent = '播放';
+        });
+
+        video.addEventListener('play', function() {
+            document.getElementById('birthdayMusic').pause();
+        });
+
         // 背景音乐控制
         const bgm = document.getElementById('bgm');
         const bgmControl = document.getElementById('bgmControl');
