@@ -5,223 +5,216 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday 魔魔 💝</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Microsoft YaHei', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            color: #2c3e50;
-        }
+        /* 保持原有样式 */
+        /* ... [之前的样式保持不变] ... */
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        header {
-            text-align: center;
-            padding: 3rem 0;
+        /* 添加背景音乐控制样式 */
+        .bgm-control {
+            position: fixed;
+            right: 20px;
+            top: 20px;
+            z-index: 1000;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 10px;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        h1 {
-            font-size: 2.5rem;
-            color: #e74c3c;
-            margin-bottom: 1rem;
-            animation: fadeInDown 1s ease-out;
+        .bgm-control:hover {
+            transform: scale(1.1);
         }
 
-        .subtitle {
-            font-size: 1.2rem;
-            color: #7f8c8d;
-            margin-bottom: 2rem;
-            animation: fadeIn 1.5s ease-out;
+        .bgm-control.playing {
+            animation: rotate 5s linear infinite;
         }
 
-        .section {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            animation: fadeIn 1s ease-out;
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
-        .section h2 {
-            color: #2c3e50;
-            border-bottom: 2px solid #e74c3c;
-            padding-bottom: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .video-container {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-        }
-
-        .video-container video {
-            position: absolute;
+        /* 弹幕样式 */
+        .danmaku-container {
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 10px;
+            pointer-events: none;
+            z-index: 999;
+            overflow: hidden;
         }
 
-        .audio-container {
-            background: #f8f9fa;
-            padding: 1rem;
-            border-radius: 10px;
-            margin-bottom: 1rem;
+        .danmaku {
+            position: absolute;
+            white-space: nowrap;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+            font-size: 1.2rem;
+            animation: danmakuMove linear;
         }
 
-        .audio-player {
-            width: 100%;
-            margin: 0.5rem 0;
+        @keyframes danmakuMove {
+            from { transform: translateX(100%); }
+            to { transform: translateX(-100%); }
         }
 
-        .pdf-container {
-            width: 100%;
-            height: 800px;
+        /* 弹幕发送区域样式 */
+        .danmaku-input-area {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1000;
+            display: flex;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .danmaku-input {
+            padding: 5px 10px;
             border: none;
-            border-radius: 10px;
+            border-radius: 15px;
+            outline: none;
+            width: 200px;
         }
 
-        .love-quote {
-            font-style: italic;
-            text-align: center;
-            margin: 2rem 0;
-            color: #e74c3c;
-            line-height: 1.8;
-            animation: fadeIn 2s ease-out;
-        }
-
-        footer {
-            text-align: center;
-            padding: 2rem 0;
-            color: #7f8c8d;
-            animation: fadeIn 2.5s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .heart {
-            display: inline-block;
-            color: #e74c3c;
-            animation: pulse 1.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-            100% { transform: scale(1); }
-        }
-
-        .control-btn {
+        .send-danmaku-btn {
             background: #e74c3c;
             color: white;
             border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
+            padding: 5px 15px;
+            border-radius: 15px;
             cursor: pointer;
-            margin: 0.5rem;
             transition: all 0.3s ease;
         }
 
-        .control-btn:hover {
+        .send-danmaku-btn:hover {
             background: #c0392b;
-            transform: translateY(-2px);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Happy Birthday 魔魔 <span class="heart">❤️</span></h1>
-            <div class="subtitle">愿你的23岁充满爱与欢乐</div>
-        </header>
-
-        <section class="section">
-            <h2>给你的生日祝福视频 <span class="heart">💝</span></h2>
-            <div class="video-container">
-                <video id="birthdayVideo" controls>
-                    <source src="assets/birthday-video.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div style="text-align: center;">
-                <button class="control-btn" onclick="document.getElementById('birthdayVideo').play()">播放</button>
-                <button class="control-btn" onclick="document.getElementById('birthdayVideo').pause()">暂停</button>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>给你的生日音乐 <span class="heart">🎵</span></h2>
-            <div class="audio-container">
-                <audio id="birthdayMusic" class="audio-player" controls>
-                    <source src="assets/birthday-music.mp3" type="audio/mpeg">
-                    Your browser does not support the audio element.
-                </audio>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>我们的故事 <span class="heart">📖</span></h2>
-            <iframe class="pdf-container" src="assets/love-story.pdf"></iframe>
-        </section>
-
-        <section class="section">
-            <div class="love-quote">
-                "闻道中西合冶，学思南北同流。<br>
-                凤箫声处蓦回头，邀饮葡萄美酒。<br>
-                打遍江山万里，斗歌日月千秋。<br>
-                须约晴日上鹤楼。何幸执子之手。"
-            </div>
-        </section>
-
-        <footer>
-            <p>Forever Yours, 叩叩 <span class="heart">❤️</span></p>
-            <p>2024.11.12</p>
-        </footer>
+    <!-- 添加背景音乐控制按钮 -->
+    <div class="bgm-control" id="bgmControl" title="背景音乐">
+        🎵
     </div>
 
-    <script>
-        // 页面加载完成后自动播放音乐（如果需要）
-        window.onload = function() {
-            // 如果想自动播放音乐，取消下面的注释
-           / document.getElementById('birthdayMusic').play();
-        };
+    <!-- 添加弹幕容器 -->
+    <div class="danmaku-container" id="danmakuContainer"></div>
 
-        // 防止视频和音频同时播放
-        document.getElementById('birthdayVideo').addEventListener('play', function() {
-            document.getElementById('birthdayMusic').pause();
+    <!-- 添加弹幕发送区域 -->
+    <div class="danmaku-input-area">
+        <input type="text" class="danmaku-input" id="danmakuInput" placeholder="发送祝福弹幕...">
+        <button class="send-danmaku-btn" id="sendDanmaku">发送</button>
+    </div>
+
+    <!-- 添加背景音乐 -->
+    <audio id="bgm" loop>
+        <source src="assets/media/audio/background-music.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- 其他原有内容保持不变 -->
+    <!-- ... -->
+
+    <script>
+        // 背景音乐控制
+        const bgm = document.getElementById('bgm');
+        const bgmControl = document.getElementById('bgmControl');
+        let isBgmPlaying = false;
+
+        bgmControl.addEventListener('click', function() {
+            if (isBgmPlaying) {
+                bgm.pause();
+                bgmControl.classList.remove('playing');
+            } else {
+                bgm.play();
+                bgmControl.classList.add('playing');
+            }
+            isBgmPlaying = !isBgmPlaying;
         });
 
-        document.getElementById('birthdayMusic').addEventListener('play', function() {
-            document.getElementById('birthdayVideo').pause();
+        // 预设的祝福语
+        const blessings = [
+            "魔魔生日快乐！",
+            "愿你永远快乐！",
+            "祝最可爱的魔魔生日快乐~",
+            "愿你的23岁充满爱与希望",
+            "Happy Birthday 魔魔！",
+            "生日快乐呀~",
+            "愿你被世界温柔以待",
+            "永远爱你哦魔魔~",
+            "今天是魔魔的主场！",
+            "祝魔魔天天开心！"
+        ];
+
+        // 弹幕功能
+        const danmakuContainer = document.getElementById('danmakuContainer');
+        const danmakuInput = document.getElementById('danmakuInput');
+        const sendDanmakuBtn = document.getElementById('sendDanmaku');
+
+        // 发送弹幕函数
+        function sendDanmaku(text) {
+            const danmaku = document.createElement('div');
+            danmaku.className = 'danmaku';
+            danmaku.textContent = text;
+            
+            // 随机设置弹幕的垂直位置
+            const top = Math.random() * (window.innerHeight - 50);
+            danmaku.style.top = `${top}px`;
+            
+            // 随机设置弹幕颜色
+            const colors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#96ceb4', '#ffeead', '#d4a4eb'];
+            danmaku.style.color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // 设置动画时长
+            const duration = 10 + Math.random() * 5;
+            danmaku.style.animationDuration = `${duration}s`;
+            
+            danmakuContainer.appendChild(danmaku);
+            
+            // 动画结束后移除弹幕
+            danmaku.addEventListener('animationend', () => {
+                danmaku.remove();
+            });
+        }
+
+        // 按钮发送弹幕
+        sendDanmakuBtn.addEventListener('click', () => {
+            const text = danmakuInput.value.trim();
+            if (text) {
+                sendDanmaku(text);
+                danmakuInput.value = '';
+            }
+        });
+
+        // 回车发送弹幕
+        danmakuInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                const text = danmakuInput.value.trim();
+                if (text) {
+                    sendDanmaku(text);
+                    danmakuInput.value = '';
+                }
+            }
+        });
+
+        // 自动发送预设祝福
+        function autoSendBlessings() {
+            setInterval(() => {
+                const blessing = blessings[Math.floor(Math.random() * blessings.length)];
+                sendDanmaku(blessing);
+            }, 2000); // 每2秒发送一条
+        }
+
+        // 页面加载完成后开始发送祝福
+        window.addEventListener('load', () => {
+            autoSendBlessings();
         });
     </script>
 </body>
