@@ -14,8 +14,10 @@
 
     <script type="text/babel">
         const DeviceInventory = () => {
-            const currentDate = new Date('2024-12-25');
-            
+
+            const currentDate = new Date();  // This will automatically use current date
+            const [today] = React.useState(new Date().toLocaleDateString('zh-CN')); // For display
+                        
             const devices = [
                 {
                     name: '惠普星Book Pro 14 13代i7H 16G 1TB 2.8K 90Hz 银 （京东购买）',
