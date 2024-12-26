@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>电子设备资产清单</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+</head>
+<body class="bg-gray-100 p-8">
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const DeviceInventory = () => {
+            const currentDate = new Date('2024-12-25');
+            
+            const devices = [
+                {
+                    name: 'HP wind PC',
+                    category: '电子设备',
+                    purchaseDate: '2024-03-01',
+                    price: 5500,
+                    status: '使用中',
+                },
+                {
+                    name: 'iPhone 15',
+                    category: '电子设备',
+                    purchaseDate: '2024-08-01',
+                    price: 5000,
+                    status: '使用中',
+                },
+                {
+                    name: 'Apple Watch',
+                    category: '电子设备',
+                    purchaseDate: '2024-10-01',
+                    price: 2500,
+                    status: '使用中',
+                },
+                {
+                    name: 'BooX Ereader',
+                    category: '电子设备',
+                    purchaseDate: '2024-10-01',
+                    price: 2000,
+                    status: '使用中',
+                }
+            ];
+
+            const calculateDays = (purchaseDate) => {
+                const start = new Date(purchaseDate);
+                const diffTime = Math.abs(currentDate - start);
+                return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+            };
+
+            const calculateDailyPrice = (price, days) => {
+                return (price / days).toFixed(2);
+            };
+
+            const totalAssets = devices.reduce((sum, device) => sum + device.price, 0);
+
+            return (
+                <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
+                    <h1 className="text-2xl font-bold mb-4">电子设备资产清单</h1>
+                    <div className="overflow-x-auto">
+                        <table className="w-full border-collapse">
+                            <thead>
+                                <tr className="bg-gray-100">
+                                    <th className="p-2 border text-left">名称</th>
+                                    <th className="p-2 border text-left">电子设备</th>
+                                    <th className="p-2 border text-left">购买日期</th>
+                                    <th className="p-2 border text-right">买入价格 (CNY)</th>
+                                    <th className="p-2 border text-right">每天使用价格 (CNY)</th>
+                                    <th className="p-2 border text-right">使用天数</th>
+                                    <th className="p-2 border text-left">设备现状</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {devices.map((device, index) => {
+                                    const days = calculateDays(device.purchaseDate);
+                                    const dailyPrice = calculateDailyPrice(device.price, days);
+                                    
+                                    return (
+                                        <tr key={index} className="hover:bg-gray-50">
+                                            <td className="p-2 border">{device.name}</td>
+                                            <td className="p-2 border">{device.category}</td>
+                                            <td className="p-2 border">{device.purchaseDate}</td>
+                                            <td className="p-2 border text-right">{device.price.toLocaleString()}</td>
+                                            <td className="p-2 border text-right">{dailyPrice}</td>
+                                            <td className="p-2 border text-right">{days}</td>
+                                            <td className="p-2 border">{device.status}</td>
+                                        </tr>
+                                    );
+                                })}
+                                <tr className="bg-gray-100 font-bold">
+                                    <td colSpan="3" className="p-2 border text-right">总资产:</td>
+                                    <td className="p-2 border text-right">{totalAssets.toLocaleString()} CNY</td>
+                                    <td colSpan="3" className="p-2 border"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            );
+        };
+
+        ReactDOM.render(<DeviceInventory />, document.getElementById('root'));
+    </script>
+</body>
+</html>
