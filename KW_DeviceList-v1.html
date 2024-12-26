@@ -1,7 +1,10 @@
+import React from 'react';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
 const DeviceInventory = () => {
     const currentDate = new Date();
     const [today] = React.useState(new Date().toLocaleDateString('zh-CN'));
-    
+                    
     const devices = [
         {
             name: '惠普星Book Pro 14 13代i7H 16G 1TB 2.8K 90Hz 银 （京东购买）',
@@ -50,26 +53,41 @@ const DeviceInventory = () => {
         return (price / days).toFixed(2);
     };
 
-    const truncateName = (name) => {
-        return name.slice(0, 10) + (name.length > 10 ? '...' : '');
-    };
-
     const totalAssets = devices.reduce((sum, device) => sum + device.price, 0);
 
+    // Transform data for the bar chart
+    const chartData = devices.map(device => ({
+        name: device.name.substring(0, 10) + '...',
+        price: device.price
+    }));
+
     return (
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
             <h1 className="text-2xl font-bold mb-4">设备资产清单</h1>
+            
+            {/* Bar Chart */}
+            <div className="mb-8 h-64">
+                <BarChart width={800} height={250} data={chartData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="name" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Bar dataKey="price" fill="#8884d8" name="价格 (CNY)" />
+                </BarChart>
+            </div>
+
             <div className="overflow-x-auto">
-                <table className="min-w-full border-collapse border border-gray-200">
+                <table className="w-full border-collapse">
                     <thead>
                         <tr className="bg-gray-100">
-                            <th className="p-2 border border-gray-200">名称</th>
-                            <th className="p-2 border border-gray-200">设备类型</th>
-                            <th className="p-2 border border-gray-200">购买日期</th>
-                            <th className="p-2 border border-gray-200">买入价格 (CNY)</th>
-                            <th className="p-2 border border-gray-200">每天价格 (CNY)</th>
-                            <th className="p-2 border border-gray-200">使用天数</th>
-                            <th className="p-2 border border-gray-200">设备现状</th>
+                            <th className="p-2 border text-left">名称</th>
+                            <th className="p-2 border text-left">设备类型</th>
+                            <th className="p-2 border text-left">购买日期</th>
+                            <th className="p-2 border text-right">买入价格 (CNY)</th>
+                            <th className="p-2 border text-right">每天使用价格 (CNY)</th>
+                            <th className="p-2 border text-right">使用天数</th>
+                            <th className="p-2 border text-left">设备现状</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -79,33 +97,20 @@ const DeviceInventory = () => {
                             
                             return (
                                 <tr key={index} className="hover:bg-gray-50">
-                                    <td className="p-2 border border-gray-200">
-                                        <div className="group relative">
-                                            <span>{truncateName(device.name)}</span>
-                                            <span className="invisible group-hover:visible absolute z-10 bg-gray-800 text-white text-sm rounded p-2 -mt-1 ml-14">
-                                                {device.name}
-                                            </span>
-                                        </div>
-                                    </td>
-                                    <td className="p-2 border border-gray-200">{device.category}</td>
-                                    <td className="p-2 border border-gray-200">{device.purchaseDate}</td>
-                                    <td className="p-2 border border-gray-200 text-right">{device.price.toLocaleString()}</td>
-                                    <td className="p-2 border border-gray-200 text-right">{dailyPrice}</td>
-                                    <td className="p-2 border border-gray-200 text-right">{days}</td>
-                                    <td className="p-2 border border-gray-200">
-                                        <span className={`px-2 py-1 rounded ${
-                                            device.status === '使用中' ? 'text-green-600' : 'text-yellow-600'
-                                        }`}>
-                                            {device.status}
-                                        </span>
-                                    </td>
+                                    <td className="p-2 border">{device.name.substring(0, 10) + '...'}</td>
+                                    <td className="p-2 border">{device.category}</td>
+                                    <td className="p-2 border">{device.purchaseDate}</td>
+                                    <td className="p-2 border text-right">{device.price.toLocaleString()}</td>
+                                    <td className="p-2 border text-right">{dailyPrice}</td>
+                                    <td className="p-2 border text-right">{days}</td>
+                                    <td className="p-2 border">{device.status}</td>
                                 </tr>
                             );
                         })}
-                        <tr className="bg-gray-100">
-                            <td colSpan="3" className="p-2 border border-gray-200 text-right font-bold">总资产:</td>
-                            <td className="p-2 border border-gray-200 text-right font-bold">{totalAssets.toLocaleString()} CNY</td>
-                            <td colSpan="3" className="p-2 border border-gray-200"></td>
+                        <tr className="bg-gray-100 font-bold">
+                            <td colSpan="3" className="p-2 border text-right">总资产:</td>
+                            <td className="p-2 border text-right">{totalAssets.toLocaleString()} CNY</td>
+                            <td colSpan="3" className="p-2 border"></td>
                         </tr>
                     </tbody>
                 </table>
