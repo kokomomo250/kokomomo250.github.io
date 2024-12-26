@@ -1,0 +1,115 @@
+const DeviceInventory = () => {
+    const currentDate = new Date();
+    const [today] = React.useState(new Date().toLocaleDateString('zh-CN'));
+                    
+    const devices = [
+        {
+            name: '惠普星Book Pro 14 13代i7H 16G 1TB 2.8K 90Hz 银 （京东购买）',
+            category: '电子设备',
+            purchaseDate: '2023-06-10',
+            price: 5973.5,
+            status: '使用中',
+        },
+        {
+            name: 'iPhone 15 黑色 128GB 全网通5G（拼多多购买）',
+            category: '电子设备',
+            purchaseDate: '2024-07-15',
+            price: 4858,
+            status: '使用中',
+        },
+        {
+            name: '文石BOOX NoteX3 青春版 3+32G 墨水屏电纸书 （淘宝购买）',
+            category: '电子设备',
+            purchaseDate: '2024-10-06',
+            price: 1979,
+            status: '使用中',
+        },
+        {
+            name: 'Apple Watch Series 10 [GPS 46mm case] Smartwatch with Silver Aluminium Case（Amazon US 购买）',
+            category: '电子设备',
+            purchaseDate: '2024-12-05',
+            price: 2584,
+            status: '使用中',
+        },
+        {
+            name: '相机 （淘宝京东Amazon或者官网？Walmart购买）',
+            category: '电子设备',
+            purchaseDate: '2024-12-27',
+            price: 10000,
+            status: '待购买',
+        }
+    ];
+
+    const calculateDays = (purchaseDate) => {
+        const start = new Date(purchaseDate);
+        const diffTime = Math.abs(currentDate - start);
+        return Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    };
+
+    const calculateDailyPrice = (price, days) => {
+        return (price / days).toFixed(2);
+    };
+
+    const truncateName = (name) => {
+        return name.slice(0, 10) + (name.length > 10 ? '...' : '');
+    };
+
+    const totalAssets = devices.reduce((sum, device) => sum + device.price, 0);
+
+    return (
+        <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h1 className="text-2xl font-bold mb-4">设备资产清单</h1>
+            <div className="overflow-x-auto">
+                <table className="w-full border-collapse">
+                    <thead>
+                        <tr className="bg-gray-200">
+                            <th className="p-3 border text-left font-semibold">名称</th>
+                            <th className="p-3 border text-left font-semibold">设备类型</th>
+                            <th className="p-3 border text-left font-semibold">购买日期</th>
+                            <th className="p-3 border text-right font-semibold">买入价格 (CNY)</th>
+                            <th className="p-3 border text-right font-semibold">每天价格 (CNY)</th>
+                            <th className="p-3 border text-right font-semibold">使用天数</th>
+                            <th className="p-3 border text-left font-semibold">设备现状</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {devices.map((device, index) => {
+                            const days = calculateDays(device.purchaseDate);
+                            const dailyPrice = calculateDailyPrice(device.price, days);
+                            
+                            return (
+                                <tr key={index} className="hover:bg-gray-50 transition-colors duration-150">
+                                    <td className="p-3 border">
+                                        <div className="tooltip relative group">
+                                            {truncateName(device.name)}
+                                            <span className="invisible group-hover:visible absolute z-10 bg-gray-800 text-white text-sm rounded p-2 -mt-1 ml-14">
+                                                {device.name}
+                                            </span>
+                                        </div>
+                                    </td>
+                                    <td className="p-3 border">{device.category}</td>
+                                    <td className="p-3 border">{device.purchaseDate}</td>
+                                    <td className="p-3 border text-right font-medium">{device.price.toLocaleString()}</td>
+                                    <td className="p-3 border text-right">{dailyPrice}</td>
+                                    <td className="p-3 border text-right">{days}</td>
+                                    <td className="p-3 border">
+                                        <span className={`px-2 py-1 rounded ${device.status === '使用中' ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
+                                            {device.status}
+                                        </span>
+                                    </td>
+                                </tr>
+                            );
+                        })}
+                        <tr className="bg-gray-200 font-bold">
+                            <td colSpan="3" className="p-3 border text-right">总资产:</td>
+                            <td className="p-3 border text-right">{totalAssets.toLocaleString()} CNY</td>
+                            <td colSpan="3" className="p-3 border"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    );
+};
+
+export default DeviceInventory;
