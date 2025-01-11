@@ -6,113 +6,86 @@
     <title>魔魔の美食推荐</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Feather Icons -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.29.0/feather.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* 动画和过渡效果 */
         .card {
             transition: all 0.3s ease;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
         .button {
             transition: all 0.2s ease;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 500;
-            cursor: pointer;
         }
         .button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .button:active {
             transform: translateY(1px);
         }
-        /* 主题颜色 */
-        .theme-pink {
-            background-color: #FDF2F8;
-        }
-        .theme-pink-dark {
-            background-color: #FBD5E5;
-        }
-        /* 图标样式 */
-        .feather {
-            width: 18px;
-            height: 18px;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-            fill: none;
-        }
     </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-100">
     <div class="max-w-4xl mx-auto p-4">
-        <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">魔魔の美食推荐</h1>
+        <h1 class="text-3xl font-bold text-center mb-8">魔魔の美食推荐</h1>
 
         <!-- 忌口提示 -->
-        <div class="card mb-8 bg-red-50 p-6">
-            <h2 class="text-xl font-semibold mb-4 text-red-700 flex items-center">
-                <i data-feather="alert-triangle" class="mr-2"></i>
-                特别注意
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div class="bg-white p-4 rounded-lg">
-                    <h3 class="font-medium text-red-600 mb-2 flex items-center">
-                        <i data-feather="alert-circle" class="mr-2"></i>
-                        过敏/不耐受:
-                    </h3>
-                    <ul class="list-disc list-inside text-red-600" id="allergies-list"></ul>
-                </div>
-                <div class="bg-white p-4 rounded-lg">
-                    <h3 class="font-medium text-red-600 mb-2 flex items-center">
-                        <i data-feather="x-circle" class="mr-2"></i>
-                        不喜欢的食材:
-                    </h3>
-                    <ul class="list-disc list-inside text-red-600" id="dislikes-list"></ul>
+        <div class="card mb-8 bg-red-50 rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-4 text-red-700">特别注意 ⚠️</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <h3 class="font-medium text-red-600 mb-2">过敏/不耐受:</h3>
+                        <ul class="list-disc list-inside text-red-600" id="allergies-list">
+                        </ul>
+                    </div>
+                    <div>
+                        <h3 class="font-medium text-red-600 mb-2">不喜欢的食材:</h3>
+                        <ul class="list-disc list-inside text-red-600" id="dislikes-list">
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
 
         <!-- 推荐部分 -->
-        <div class="card mb-8 bg-white p-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                <i data-feather="heart" class="mr-2 text-pink-500"></i>
-                随机搭配
-            </h2>
-            <div class="flex gap-4 mb-4">
-                <button onclick="app.generateRecommendation('breakfast')" 
-                        class="button bg-blue-500 text-white hover:bg-blue-600 flex items-center">
-                    <i data-feather="coffee" class="mr-2"></i>
-                    早餐
-                </button>
-                <button onclick="app.generateRecommendation('lunch')"
-                        class="button bg-blue-500 text-white hover:bg-blue-600 flex items-center">
-                    <i data-feather="sun" class="mr-2"></i>
-                    午餐
-                </button>
-                <button onclick="app.generateRecommendation('dinner')"
-                        class="button bg-blue-500 text-white hover:bg-blue-600 flex items-center">
-                    <i data-feather="moon" class="mr-2"></i>
-                    晚餐
-                </button>
+        <div class="card mb-8 bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i icon-name="heart" class="mr-2 text-pink-500"></i>
+                    随机搭配
+                </h2>
+                <div class="flex gap-4 mb-4">
+                    <button onclick="app.generateRecommendation('breakfast')" 
+                            class="button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        早餐
+                    </button>
+                    <button onclick="app.generateRecommendation('lunch')"
+                            class="button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        午餐
+                    </button>
+                    <button onclick="app.generateRecommendation('dinner')"
+                            class="button px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                        晚餐
+                    </button>
+                </div>
+                <div id="recommendation-result" class="hidden bg-gray-100 p-4 rounded-lg">
+                </div>
             </div>
-            <div id="recommendation-result" class="hidden bg-gray-50 p-4 rounded-lg"></div>
         </div>
 
         <!-- 甜品展示 -->
-        <div class="card bg-white p-6">
-            <h2 class="text-xl font-semibold mb-4 text-gray-800 flex items-center">
-                <i data-feather="cake" class="mr-2 text-pink-500"></i>
-                晚餐可选甜品
-            </h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="desserts-grid"></div>
+        <div class="card bg-white rounded-lg shadow">
+            <div class="p-6">
+                <h2 class="text-xl font-semibold mb-4 flex items-center">
+                    <i icon-name="cake" class="mr-2 text-pink-500"></i>
+                    晚餐可选甜品
+                </h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="desserts-grid">
+                </div>
+            </div>
         </div>
     </div>
 
@@ -204,19 +177,19 @@
             function generateRecommendation(time) {
                 const resultDiv = document.getElementById('recommendation-result');
                 resultDiv.classList.remove('hidden');
-                
+                
                 let content = '';
-                
+                
                 if (time === 'breakfast') {
                     content = `
                         <h3 class="font-medium text-lg mb-2">推荐早餐搭配:</h3>
                         <div class="space-y-2">
                             <p class="flex items-center">
-                                <i data-feather="coffee" class="mr-2"></i>
+                                <i icon-name="utensils" class="mr-2 h-4 w-4"></i>
                                 主食: 豆浆 + 包子(梅菜扣肉/黑椒牛肉) + 煎蛋
                             </p>
                             <p class="flex items-center">
-                                <i data-feather="apple" class="mr-2"></i>
+                                <i icon-name="apple" class="mr-2 h-4 w-4"></i>
                                 额外: 少许水果
                             </p>
                         </div>
@@ -228,47 +201,47 @@
                     const veggies = foodDatabase.vegetable.sort(() => 0.5 - Math.random()).slice(0, 2);
                     const drink = getRandomItem(foodDatabase.drinks);
                     const fruit = getRandomItem(foodDatabase.fruits);
-                    
+                    
                     content = `
                         <h3 class="font-medium text-lg mb-2">推荐${time === 'lunch' ? '午餐' : '晚餐'}搭配:</h3>
                         <div class="space-y-2">
                             <p class="flex items-center">
-                                <i data-feather="anchor" class="mr-2"></i>
+                                <i icon-name="fish" class="mr-2 h-4 w-4"></i>
                                 荤菜: ${seafood.recommend} + ${meat.recommend}
                             </p>
                             <p class="flex items-center">
-                                <i data-feather="circle" class="mr-2"></i>
+                                <i icon-name="egg" class="mr-2 h-4 w-4"></i>
                                 蛋类: ${egg.recommend}
                             </p>
                             <p class="flex items-center">
-                                <i data-feather="leaf" class="mr-2"></i>
+                                <i icon-name="salad" class="mr-2 h-4 w-4"></i>
                                 素菜: ${veggies[0].recommend} + ${veggies[1].recommend}
                             </p>
                             <p class="flex items-center">
-                                <i data-feather="coffee" class="mr-2"></i>
+                                <i icon-name="coffee" class="mr-2 h-4 w-4"></i>
                                 饮品: ${drink}
                             </p>
                             <p class="flex items-center">
-                                <i data-feather="apple" class="mr-2"></i>
+                                <i icon-name="apple" class="mr-2 h-4 w-4"></i>
                                 水果: ${fruit}
                             </p>
                     `;
-                    
+                    
                     if (time === 'dinner') {
                         const dessert = getRandomItem(foodDatabase.desserts.可选甜品);
                         content += `
                             <p class="flex items-center">
-                                <i data-feather="cake" class="mr-2"></i>
+                                <i icon-name="cake" class="mr-2 h-4 w-4"></i>
                                 甜点: ${dessert.name} (${dessert.note})
                             </p>
                         `;
                     }
-                    
+                    
                     content += '</div>';
                 }
-                
+                
                 resultDiv.innerHTML = content;
-                feather.replace();
+                lucide.createIcons();
             }
 
             // 初始化页面
@@ -293,24 +266,26 @@
                 const dessertsGrid = document.getElementById('desserts-grid');
                 foodDatabase.desserts.可选甜品.forEach(dessert => {
                     const div = document.createElement('div');
-                    div.className = 'bg-gray-50 p-4 rounded-lg hover:bg-gray-100 transition-colors';
+                    div.className = 'bg-gray-50 p-3 rounded-lg';
                     div.innerHTML = `
-                        <div class="flex items-center">
-                            <i data-feather="cake" class="mr-2 text-pink-500"></i>
-                            <div>
-                                <p class="font-medium">${dessert.name}</p>
-                                <p class="text-sm text-gray-600">${dessert.note}</p>
-                            </div>
-                        </div>
+                        <p class="font-medium">${dessert.name}</p>
+                        <p class="text-sm text-gray-600">${dessert.note}</p>
                     `;
                     dessertsGrid.appendChild(div);
                 });
 
-                // 初始化所有图标
-                feather.replace();
+                // 初始化图标
+                lucide.createIcons();
             }
 
             // 在页面加载完成后初始化
             document.addEventListener('DOMContentLoaded', initializePage);
 
             // 返回公共接口
+            return {
+                generateRecommendation
+            };
+        })();
+    </script>
+</body>
+</html>
