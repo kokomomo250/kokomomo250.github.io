@@ -13,7 +13,10 @@
         <div id="agreement" class="mb-8">
             <h2 class="text-xl font-semibold mb-4">占卜原则</h2>
             <div class="space-y-2">
-                <p>1、占卜宜心诚：占卜时，要静心调神，专心瞑想要下问的事情。 倪师说：我们人啊，在心血来潮的时候占卜, “今天眼睛怎么一直在跳” “或者心慌慌意乱乱的” 不知道要发生什么事情, 或者是一件事情，犹豫难以决定的时候，或者是此行利不利的时候, 当你心血来潮的时候，想用它，就以当时为准</p>
+                <p>1、占卜宜心诚：</p>
+                <ul class="list-disc pl-8 space-y-2">
+                    占卜时，要静心调神，专心瞑想要下问的事情。 倪师说：我们人啊，在心血来潮的时候占卜, “今天眼睛怎么一直在跳” “或者心慌慌意乱乱的” 不知道要发生什么事情, 或者是一件事情，犹豫难以决定的时候，或者是此行利不利的时候, 当你心血来潮的时候，想用它，就以当时为准</p>
+                </ul>
                 <p>2、起卦原则：</p>
                 <ul class="list-disc pl-8 space-y-2">
                     <li>不诚不占：故意试探易占之灵验与否不占</li>
@@ -26,7 +29,7 @@
             </div>
             <div class="mt-6 text-center">
                 <button id="agreeBtn" class="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600">
-                    我同意以上原则
+                    我同意以上原则 (无需点击)
                 </button>
             </div>
         </div>
@@ -60,8 +63,16 @@
                     <input type="number" id="lunarHour" min="1" max="12" class="w-full p-2 border rounded">
                 </div>
                 <button id="calculateBtn" class="w-full bg-green-500 text-white px-6 py-2 rounded hover:bg-green-600">
-                    开始占卜
+                    点击开始占卜
                 </button>
+                <div class="text-sm text-gray-600 mb-2">
+                        占卜结果含义:
+                        空亡：代表凶；流连代表事情停止不前、此行不利；<br>
+                        赤口：代表有第三者介入、是非、人为的事情干扰；<br>
+                        速喜：代表立竿见影马上看到所要的结果；<br>
+                        小吉：代表两个礼拜后看到所要的结果；<br>
+                        大安：代表一个礼拜左右看到想要的结果。
+                    </div>
             </div>
 
             <div id="result" class="mt-8 hidden">
