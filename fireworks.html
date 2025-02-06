@@ -119,7 +119,7 @@
         this.y = this.scatterY;
         this.size = 2;
       }
-      // 根据 progress（0～1）线性插值更新位置：
+      // 根据 progress（0～1）线性插值更新位置
       update(progress) {
         this.x = this.scatterX * (1 - progress) + this.targetX * progress;
         this.y = this.scatterY * (1 - progress) + this.targetY * progress;
@@ -138,10 +138,14 @@
     }
 
     let textParticles = [];
-    let textCycleDuration = 10000; // 周期：10秒
+    // 定义文字动画各阶段时长（毫秒）
+    const T1 = 1000;  // 聚集阶段：1秒（progress从0到1）
+    const T2 = 5000;  // 保持阶段：5秒（progress保持1）
+    const T3 = 1000;  // 散开阶段：1秒（progress从1到0）
+    const textCycleDuration = T1 + T2 + T3; // 总周期：7000ms
     let startTime = Date.now();
 
-    // 利用离屏画布绘制文字，并采样生成目标位置
+    // 利用离屏画布绘制分行文字，并采样生成目标位置
     function createTextParticles(text) {
       let offCanvas = document.createElement("canvas");
       offCanvas.width = canvas.width;
@@ -154,11 +158,21 @@
       offCtx.textAlign = "center";
       offCtx.textBaseline = "middle";
       offCtx.fillStyle = "white";
-      offCtx.fillText(text, offCanvas.width / 2, offCanvas.height / 2);
+      
+      // 分行绘制文字，支持换行符 "\n"
+      let lines = text.split("\n");
+      let lineHeight = fontSize * 1.2;
+      let totalHeight = lines.length * lineHeight;
+      let startY = (offCanvas.height - totalHeight) / 2 + lineHeight / 2;
+      for (let i = 0; i < lines.length; i++) {
+        offCtx.fillText(lines[i], offCanvas.width / 2, startY + i * lineHeight);
+      }
+      
+      // 采样离屏画布中的文字像素
       let imageData = offCtx.getImageData(0, 0, offCanvas.width, offCanvas.height);
       let data = imageData.data;
       textParticles = [];
-      let gap = 6; // 每隔6像素采样一次
+      let gap = 6; // 采样间隔
       for (let y = 0; y < offCanvas.height; y += gap) {
         for (let x = 0; x < offCanvas.width; x += gap) {
           let index = (y * offCanvas.width + x) * 4;
@@ -169,18 +183,19 @@
       }
     }
 
-    createTextParticles("魔魔叩叩永远在一起，爱你");
+    // 使用分行文字（用 "\n" 分割）
+    createTextParticles("魔魔叩叩\n永远\n在一起");
 
     /* -------------------------------
        主动画循环
     ------------------------------- */
 
     function animate() {
-      // 使用半透明黑色填充产生烟花尾迹效果
+      // 使用半透明黑色填充产生尾迹效果
       ctx.fillStyle = "rgba(0,0,0,0.2)";
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // 随机生成烟花
+      // 更新烟花效果
       if (Math.random() < 0.05) {
         fireworks.push(new Firework());
       }
@@ -190,14 +205,22 @@
       });
       fireworks = fireworks.filter(fw => !fw.exploded || fw.particles.length > 0);
 
-      // 计算文字粒子动画进度：周期前半段 progress 0～1，后半段 1～0
+      // 计算文字动画进度
       let elapsed = Date.now() - startTime;
       let cycleTime = elapsed % textCycleDuration;
-      let progress = (cycleTime < textCycleDuration / 2) ?
-                     (cycleTime / (textCycleDuration / 2)) :
-                     (1 - ((cycleTime - textCycleDuration / 2) / (textCycleDuration / 2)));
-      // 在周期交界时重置散布位置
-      if (cycleTime < 100 || Math.abs(cycleTime - textCycleDuration / 2) < 100) {
+      let progress;
+      if (cycleTime < T1) {
+        // 聚集阶段：从 0 到 1
+        progress = cycleTime / T1;
+      } else if (cycleTime < T1 + T2) {
+        // 保持阶段：progress = 1
+        progress = 1;
+      } else {
+        // 散开阶段：从 1 到 0
+        progress = 1 - ((cycleTime - (T1 + T2)) / T3);
+      }
+      // 在周期交界时，重置所有文字粒子的散布位置
+      if (cycleTime < 100 || Math.abs(cycleTime - (T1 + T2)) < 100) {
         textParticles.forEach(tp => tp.resetScatter());
       }
       // 更新并绘制文字粒子
@@ -211,11 +234,11 @@
 
     animate();
 
-    // 监听窗口大小变化，更新画布尺寸并重生成文字粒子
+    // 监听窗口大小变化，更新画布尺寸并重新生成文字粒子
     window.addEventListener("resize", () => {
       canvas.width = window.innerWidth;
       canvas.height = window.innerHeight;
-      createTextParticles("魔魔叩叩永远在一起，爱你");
+      createTextParticles("魔魔叩叩\n永远\n在一起");
     });
   </script>
 </body>
