@@ -1,4 +1,4 @@
-## 告白气球 (not original; created by[霸都丶傲天](https://github.com/ajlovechina))
+# 告白气球 (not original; created by[霸都丶傲天](https://github.com/ajlovechina))
 
 ### TODO
 * [x] 添加背景音乐
