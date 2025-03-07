@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>叩叩模拟器 - 哄魔魔开心（困难模式）</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+        .option-btn:hover {
+            background-color: #f0f7ff;
+        }
+        .progress-bar {
+            height: 12px;
+            border-radius: 6px;
+            background-color: #e2e8f0;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 0.5s ease-out;
+        }
+        @keyframes timerAnimation {
+            from { width: 100%; background-color: #60a5fa; }
+            50% { background-color: #f59e0b; }
+            to { width: 0%; background-color: #ef4444; }
+        }
+        .timer-bar {
+            height: 6px;
+            border-radius: 3px;
+            background-color: #60a5fa;
+            width: 100%;
+            animation-name: timerAnimation;
+            animation-timing-function: linear;
+            animation-play-state: paused;
+        }
+        .timer-active {
+            animation-play-state: running;
+        }
+        .event-notification {
+            animation: fadeInOut 4s ease-in-out;
+            opacity: 0;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 50;
+        }
+        @keyframes fadeInOut {
+            0% { opacity: 0; }
+            10% { opacity: 1; }
+            80% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="max-w-md mx-auto bg-white shadow-sm min-h-screen relative">
+        <!-- 顶部标题 -->
+        <div class="text-center py-4 border-b border-gray-200">
+            <h1 class="text-xl font-bold text-red-800">叩叩模拟器 - 困难模式</h1>
+            <p class="text-gray-500 text-sm">哄魔魔开心（魔王级）</p>
+        </div>
+        
+        <!-- 随机事件通知 -->
+        <div id="event-notification" class="event-notification hidden">
+            <div class="bg-red-100 border-l-4 border-red-600 text-red-700 p-4 rounded shadow-lg">
+                <p class="font-bold mb-1" id="event-title">突发事件</p>
+                <p id="event-desc">魔魔突然想起了你上个月忘记她生日的事情！</p>
+            </div>
+        </div>
+        
+        <!-- 游戏界面容器 -->
+        <div id="game-container">
+            <!-- 开始游戏界面 -->
+            <div id="start-screen" class="p-4">
+                <h2 class="text-lg font-bold mb-4 text-red-800">叩叩模拟器：哄魔魔开心（困难模式）</h2>
+                
+                <p class="mb-3">2025年3月7日，作为魔魔的男朋友叩叩，你说了一些深深伤害魔魔的话，导致她非常生气。</p>
+                <p class="mb-3">这次和好对你们的关系至关重要，然而魔魔情绪已经降到历史最低点。</p>
+                <p class="mb-3 font-bold text-red-700">警告：困难模式下，魔魔的心情持续下降，你必须更加迅速且高效地安抚她！</p>
+                
+                <div class="my-4 bg-gray-50 p-3 rounded">
+                    <h3 class="font-bold mb-2">游戏规则变更：</h3>
+                    <ul class="mb-3 pl-4 space-y-1 text-sm">
+                        <li>• 初始数值更低（30）</li>
+                        <li>• 胜利条件更高（心情和喜欢度需达95+）</li>
+                        <li>• 回合数减少（只有8轮）</li>
+                        <li>• 魔魔心情每轮自动衰减</li>
+                        <li>• 随机事件会突然降低进度</li>
+                        <li>• 同类选项重复使用效果大幅下降</li>
+                        <li>• 时间压力：每轮选择限时10秒</li>
+                        <li>• 心情低于40时，所有选项效果减半</li>
+                    </ul>
+                </div>
+                
+                <button id="start-game-btn" class="w-full py-2 bg-red-100 text-red-800 border border-red-200 rounded text-center">
+                    开始挑战
+                </button>
+            </div>
+            
+            <!-- 主游戏界面 -->
+            <div id="main-game-screen" class="hidden">
+                <!-- 情景描述 -->
+                <div class="p-4">
+                    <p id="scene-description" class="text-gray-700">
+                        你坐在魔魔的房间里，她非常生气地看着你。你之前说的话深深伤害了她，现在需要迅速解决这个危机。
+                    </p>
+                    
+                    <div class="my-4 pl-3 border-l-4 border-red-500">
+                        <p class="font-bold text-red-600 mb-1">魔魔：</p>
+                        <p id="momo-quote" class="text-gray-800">"不想理你了！你根本不在乎我的感受！"</p>
+                    </div>
+                    
+                    <div id="momo-needs" class="my-3 px-3 py-2 bg-red-50 text-sm text-red-700 rounded">
+                        <p class="font-medium">魔魔的当前需求：<span id="current-need">未知</span></p>
+                    </div>
+                </div>
+                
+                <!-- 状态指标 -->
+                <div class="px-4 py-3 bg-gray-50">
+                    <!-- 魔魔心情值 -->
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm text-gray-600">魔魔心情值</span>
+                        <div class="flex items-center">
+                            <span id="momo-mood-emoji" class="mr-1">😠</span>
+                            <span id="momo-mood-value" class="text-sm font-medium">30</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar mb-3">
+                        <div id="momo-mood-bar" class="progress-fill bg-red-500" style="width: 30%"></div>
+                    </div>
+                    
+                    <!-- 魔魔喜欢叩叩值 -->
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm text-gray-600">魔魔喜欢叩叩值</span>
+                        <div class="flex items-center">
+                            <span id="momo-love-emoji" class="mr-1">💔</span>
+                            <span id="momo-love-value" class="text-sm font-medium">30</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar mb-3">
+                        <div id="momo-love-bar" class="progress-fill bg-red-500" style="width: 30%"></div>
+                    </div>
+                    
+                    <!-- 叩叩心情值 -->
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-sm text-gray-600">叩叩心情值</span>
+                        <div class="flex items-center">
+                            <span id="koko-mood-emoji" class="mr-1">😰</span>
+                            <span id="koko-mood-value" class="text-sm font-medium">30</span>
+                        </div>
+                    </div>
+                    <div class="progress-bar">
+                        <div id="koko-mood-bar" class="progress-fill bg-red-500" style="width: 30%"></div>
+                    </div>
+                </div>
+                
+                <!-- 回合和倒计时 -->
+                <div class="p-4 pt-2 pb-0 flex justify-between items-center">
+                    <span class="text-sm font-medium" id="round-counter">第1/8轮</span>
+                    <span class="text-sm font-medium" id="timer-text">剩余时间: 10秒</span>
+                </div>
+                <div class="px-4 pt-1 pb-1">
+                    <div class="timer-bar" id="timer-bar"></div>
+                </div>
+                
+                <!-- 选项区域 -->
+                <div id="options-container" class="p-4">
+                    <!-- 选项将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 结果界面 -->
+            <div id="result-screen" class="hidden p-4">
+                <div class="border-l-4 pl-3 mb-6" id="result-border">
+                    <h2 id="result-title" class="text-lg font-bold mb-2">游戏结束</h2>
+                    
+                    <p id="result-desc" class="mb-4">
+                        结果描述...
+                    </p>
+                    
+                    <div class="mb-4">
+                        <p class="font-medium mb-1">最终指标：</p>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm">魔魔心情值：</span>
+                            <div class="flex items-center">
+                                <span id="final-momo-emoji" class="mr-1">😊</span>
+                                <span id="final-momo-mood" class="font-medium">85</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center mb-1">
+                            <span class="text-sm">魔魔喜欢叩叩值：</span>
+                            <div class="flex items-center">
+                                <span id="final-love-emoji" class="mr-1">❤️</span>
+                                <span id="final-momo-love" class="font-medium">80</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-sm">叩叩心情值：</span>
+                            <div class="flex items-center">
+                                <span id="final-koko-emoji" class="mr-1">😌</span>
+                                <span id="final-koko-mood" class="font-medium">60</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <p id="momo-final-quote" class="italic text-gray-700 mb-3">"魔魔的最终评价..."</p>
+                    
+                    <div class="bg-gray-50 p-3 rounded mb-4 text-sm">
+                        <p class="font-medium mb-1">游戏数据：</p>
+                        <div class="flex justify-between mb-1">
+                            <span>总共选择的行动：</span>
+                            <span id="total-actions">8</span>
+                        </div>
+                        <div class="flex justify-between mb-1">
+                            <span>触发的随机事件：</span>
+                            <span id="random-events">2</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>选项超时次数：</span>
+                            <span id="timeout-count">1</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="restart-game-btn" class="w-full py-2 bg-red-100 text-red-800 border border-red-200 rounded text-center">
+                    重新挑战
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 游戏状态
+const gameState = {
+    momoMood: 30,           // 魔魔心情值
+    momoLove: 30,           // 魔魔喜欢叩叩值
+    kokoMood: 30,           // 叩叩心情值
+    gameOver: false,        // 游戏是否结束
+    round: 0,               // 当前轮数
+    maxRounds: 8,           // 最大轮数
+    timeoutCount: 0,        // 超时次数
+    eventCount: 0,          // 随机事件触发次数
+    lastOptionType: null,   // 上一次选择的选项类型
+    repeatedOptions: {},    // 记录重复使用的选项类型
+    currentNeed: null,      // 魔魔当前的需求类型
+    timerDuration: 10       // 计时器持续时间（秒）
+};
+
+// 选项类型
+const optionTypes = {
+    APOLOGY: "道歉",
+    GIFT: "礼物",
+    PHYSICAL: "肢体接触",
+    QUALITY_TIME: "陪伴",
+    PROMISE: "承诺",
+    DISTRACTION: "转移注意力",
+    SELF_EXPLANATION: "解释自己"
+};
+
+// 需求类型描述
+const needDescriptions = {
+    [optionTypes.APOLOGY]: "魔魔希望听到真诚的道歉",
+    [optionTypes.GIFT]: "魔魔想要收到礼物和惊喜",
+    [optionTypes.PHYSICAL]: "魔魔需要肢体接触的安慰",
+    [optionTypes.QUALITY_TIME]: "魔魔需要高质量的陪伴时间",
+    [optionTypes.PROMISE]: "魔魔需要看到具体的改变承诺",
+    [optionTypes.DISTRACTION]: "魔魔需要一些快乐的转移注意力",
+    [optionTypes.SELF_EXPLANATION]: "魔魔想听你解释工作的辛苦"
+};
+
+// 魔魔的负面和正面话语
+const momoNegativePhrases = [
+    "不理你了！勾石！",
+    "你根本不懂我！",
+    "我很生气！",
+    "你总是这样！",
+    "我恨死你了！",
+    "你根本不在乎我！",
+    "我感觉你一点都不爱我...",
+    "你就知道工作，都不陪我！"
+];
+
+const momoPositivePhrases = [
+    "棒棒！",
+    "真可爱~",
+    "赏猫！",
+    "叩叩最好了！",
+    "勉强原谅你一下下~",
+    "嗯...你还算有点良心",
+    "好啦好啦，不生气了~",
+    "叩叩，爱你哦~"
+];
+
+// 随机事件
+const randomEventsData = [
+    {
+        title: "回忆涌现",
+        desc: "魔魔突然想起了你上个月忘记她生日的事情！",
+        moodEffect: -15,
+        loveEffect: -10
+    },
+    {
+        title: "好友影响",
+        desc: "魔魔的闺蜜发来消息，说你肯定是敷衍她！",
+        moodEffect: -10,
+        loveEffect: -15
+    },
+    {
+        title: "情绪爆发",
+        desc: "魔魔突然情绪崩溃，开始无声落泪...",
+        moodEffect: -20,
+        loveEffect: -5
+    },
+    {
+        title: "过往伤痛",
+        desc: "魔魔想起了你们之前的争吵，情绪急剧恶化！",
+        moodEffect: -15,
+        loveEffect: -15
+    },
+    {
+        title: "消极思考",
+        desc: "魔魔怀疑你是不是不再爱她了...",
+        moodEffect: -5,
+        loveEffect: -20
+    }
+];
+
+// 选项池
+const optionPool = [
+    // 道歉类选项
+    { 
+        text: "对不起，魔魔，我不应该说那些话伤害你的感受。", 
+        mood: 12, 
+        love: 10, 
+        self: -5,
+        type: optionTypes.APOLOGY 
+    },
+    { 
+        text: "魔魔，我真的很抱歉，我说话不经思考，伤害了你。", 
+        mood: 15, 
+        love: 12, 
+        self: -8,
+        type: optionTypes.APOLOGY 
+    },
+    { 
+        text: "我错了，那些话我不该说，伤害了你我很后悔。", 
+        mood: 10, 
+        love: 8, 
+        self: -10,
+        type: optionTypes.APOLOGY 
+    },
+    
+    // 礼物类选项
+    { 
+        text: "我给你买了你最喜欢的奶茶，加了两份珍珠。", 
+        mood: 8, 
+        love: 12, 
+        self: -8,
+        type: optionTypes.GIFT 
+    },
+    { 
+        text: "看，我偷偷给你准备了这个小礼物，希望你会喜欢。", 
+        mood: 10, 
+        love: 15, 
+        self: -10,
+        type: optionTypes.GIFT 
+    },
+    { 
+        text: "给魔魔买了你最爱吃的肉肉，现在就去做给你吃！", 
+        mood: 12, 
+        love: 18, 
+        self: -8,
+        type: optionTypes.GIFT 
+    },
+    
+    // 肢体接触类选项
+    { 
+        text: "过来，亲亲魔魔~", 
+        mood: 15, 
+        love: 18, 
+        self: -5,
+        type: optionTypes.PHYSICAL 
+    },
+    { 
+        text: "要不要抱抱？我知道抱抱可以让你舒服一点。", 
+        mood: 12, 
+        love: 15, 
+        self: -3,
+        type: optionTypes.PHYSICAL 
+    },
+    { 
+        text: "来，举高高！", 
+        mood: 18, 
+        love: 15, 
+        self: -8,
+        type: optionTypes.PHYSICAL 
+    },
+    
+    // 高质量陪伴选项
+    { 
+        text: "我们一起去吃你最喜欢的那家火锅吧？我知道你想去很久了。", 
+        mood: 10, 
+        love: 12, 
+        self: -3,
+        type: optionTypes.QUALITY_TIME 
+    },
+    { 
+        text: "要不我们一起出去散散步？散步时我可以听你说说心里的想法。", 
+        mood: 12, 
+        love: 15, 
+        self: 0,
+        type: optionTypes.QUALITY_TIME 
+    },
+    { 
+        text: "魔魔，我们一起看个电影放松一下吧。你挑你喜欢的！", 
+        mood: 8, 
+        love: 10, 
+        self: 0,
+        type: optionTypes.QUALITY_TIME 
+    },
+    
+    // 承诺类选项
+    { 
+        text: "我以后会更注意自己的言行，不会再这样伤害你了。", 
+        mood: 8, 
+        love: 12, 
+        self: -5,
+        type: optionTypes.PROMISE 
+    },
+    { 
+        text: "我保证以后会多花时间陪你，把你放在第一位。", 
+        mood: 12, 
+        love: 15, 
+        self: -8,
+        type: optionTypes.PROMISE 
+    },
+    { 
+        text: "我会改变，真的。从今天开始，我会更关心你的感受。", 
+        mood: 10, 
+        love: 12, 
+        self: -5,
+        type: optionTypes.PROMISE 
+    },
+    
+    // 转移注意力选项
+    { 
+        text: "给你看我珍藏的搞笑视频，保证让你笑。", 
+        mood: 8, 
+        love: 5, 
+        self: 3,
+        type: optionTypes.DISTRACTION 
+    },
+    { 
+        text: "我给你跳个舞吧！我偷偷练了好久，就等着给你看呢。", 
+        mood: 15, 
+        love: 18, 
+        self: -8,
+        type: optionTypes.DISTRACTION 
+    },
+    { 
+        text: "魔魔，让我给你挠挠痒痒吧，知道你最喜欢这个了。", 
+        mood: 18, 
+        love: 20, 
+        self: -5,
+        type: optionTypes.DISTRACTION 
+    },
+    
+    // 解释工作忙的选项
+    { 
+        text: "对不起魔魔，我这几天work太忙了，没有照顾好你的感受。", 
+        mood: 15, 
+        love: 18, 
+        self: -5,
+        type: optionTypes.SELF_EXPLANATION 
+    },
+    { 
+        text: "我这段时间work太忙了，不应该把情绪带给你，我很抱歉。", 
+        mood: 12, 
+        love: 15, 
+        self: -8,
+        type: optionTypes.SELF_EXPLANATION 
+    },
+    { 
+        text: "我知道我最近太忙了，没有陪你，让你感到被忽视了，对不起。", 
+        mood: 15, 
+        love: 20, 
+        self: -5,
+        type: optionTypes.SELF_EXPLANATION 
+    },
+    
+    // 负面选项
+    { 
+        text: "你先冷静一下，等你气消了我们再谈吧。", 
+        mood: -15, 
+        love: -20, 
+        self: 5,
+        type: optionTypes.APOLOGY 
+    },
+    { 
+        text: "我一定是太累了才会那样说话，原谅我好吗？", 
+        mood: -5, 
+        love: -5, 
+        self: 10,
+        type: optionTypes.SELF_EXPLANATION 
+    },
+    { 
+        text: "要不我们还是保持点距离冷静一下吧。", 
+        mood: -20, 
+        love: -15, 
+        self: 8,
+        type: optionTypes.QUALITY_TIME 
+    }
+];
+
+// 魔魔反馈信息
+const momoFeedbacks = [
+    { min: 0, max: 20, text: "魔魔非常生气，她说再也不想理你了！", emoji: "😡", phrase: momoNegativePhrases[0] },
+    { min: 21, max: 40, text: "魔魔还在生气中，但偶尔会瞥你一眼...", emoji: "😠", phrase: momoNegativePhrases[1] },
+    { min: 41, max: 60, text: "魔魔的表情缓和了一些，但还是不太高兴", emoji: "😒", phrase: momoNegativePhrases[2] },
+    { min: 61, max: 80, text: "魔魔似乎消气了一点，开始愿意听你说话", emoji: "😐", phrase: momoPositivePhrases[4] },
+    { min: 81, max: 89, text: "魔魔已经不再生气，嘴角微微上扬", emoji: "😊", phrase: momoPositivePhrases[1] },
+    { min: 90, max: 100, text: "魔魔完全开心了，笑着向你靠近！", emoji: "😍", phrase: momoPositivePhrases[0] }
+];
+
+// DOM元素
+const startScreen = document.getElementById('start-screen');
+const mainGameScreen = document.getElementById('main-game-screen');
+const resultScreen = document.getElementById('result-screen');
+const startGameBtn = document.getElementById('start-game-btn');
+const restartGameBtn = document.getElementById('restart-game-btn');
+const momoMoodBar = document.getElementById('momo-mood-bar');
+const momoMoodValue = document.getElementById('momo-mood-value');
+const momoMoodEmoji = document.getElementById('momo-mood-emoji');
+const momoLoveBar = document.getElementById('momo-love-bar');
+const momoLoveValue = document.getElementById('momo-love-value');
+const momoLoveEmoji = document.getElementById('momo-love-emoji');
+const kokoMoodBar = document.getElementById('koko-mood-bar');
+const kokoMoodValue = document.getElementById('koko-mood-value');
+const kokoMoodEmoji = document.getElementById('koko-mood-emoji');
+const momoQuote = document.getElementById('momo-quote');
+const optionsContainer = document.getElementById('options-container');
+const sceneDescription = document.getElementById('scene-description');
+const roundCounter = document.getElementById('round-counter');
+const timerBar = document.getElementById('timer-bar');
+const timerText = document.getElementById('timer-text');
+const currentNeedElement = document.getElementById('current-need');
+const eventNotification = document.getElementById('event-notification');
+const eventTitle = document.getElementById('event-title');
+const eventDesc = document.getElementById('event-desc');
+
+// 结果界面元素
+const resultTitle = document.getElementById('result-title');
+const resultDesc = document.getElementById('result-desc');
+const resultBorder = document.getElementById('result-border');
+const finalMomoMood = document.getElementById('final-momo-mood');
+const finalMomoLove = document.getElementById('final-momo-love');
+const finalKokoMood = document.getElementById('final-koko-mood');
+const finalMomoEmoji = document.getElementById('final-momo-emoji');
+const finalLoveEmoji = document.getElementById('final-love-emoji');
+const finalKokoEmoji = document.getElementById('final-koko-emoji');
+const totalActions = document.getElementById('total-actions');
+const randomEventsElement = document.getElementById('random-events'); // 修复了变量名冲突
+const timeoutCount = document.getElementById('timeout-count');
+
+// 计时器相关变量
+let timerInterval;
+let timeLeft;
+
+// 更新状态栏
+function updateStatusBars() {
+    momoMoodBar.style.width = `${gameState.momoMood}%`;
+    momoMoodValue.textContent = gameState.momoMood;
+    
+    momoLoveBar.style.width = `${gameState.momoLove}%`;
+    momoLoveValue.textContent = gameState.momoLove;
+    
+    kokoMoodBar.style.width = `${gameState.kokoMood}%`;
+    kokoMoodValue.textContent = gameState.kokoMood;
+    
+    // 根据心情值更新状态栏颜色和表情
+    updateBarColors();
+    
+    // 更新魔魔的反馈
+    updateMomoFeedback();
+}
+
+// 更新状态栏颜色和表情
+function updateBarColors() {
+    // 魔魔心情值颜色和表情
+    if (gameState.momoMood < 30) {
+        momoMoodBar.className = "progress-fill bg-red-500";
+        momoMoodEmoji.textContent = "😡";
+    } else if (gameState.momoMood < 60) {
+        momoMoodBar.className = "progress-fill bg-orange-400";
+        momoMoodEmoji.textContent = "😠";
+    } else if (gameState.momoMood < 80) {
+        momoMoodBar.className = "progress-fill bg-yellow-400";
+        momoMoodEmoji.textContent = "😐";
+    } else if (gameState.momoMood < 95) {
+        momoMoodBar.className = "progress-fill bg-green-400";
+        momoMoodEmoji.textContent = "😊";
+    } else {
+        momoMoodBar.className = "progress-fill bg-green-500";
+        momoMoodEmoji.textContent = "😍";
+    }
+    
+    // 魔魔喜欢叩叩值颜色和表情
+    if (gameState.momoLove < 30) {
+        momoLoveBar.className = "progress-fill bg-red-500";
+        momoLoveEmoji.textContent = "💔";
+    } else if (gameState.momoLove < 60) {
+        momoLoveBar.className = "progress-fill bg-orange-400";
+        momoLoveEmoji.textContent = "❤️‍🩹";
+    } else if (gameState.momoLove < 80) {
+        momoLoveBar.className = "progress-fill bg-yellow-400";
+        momoLoveEmoji.textContent = "💓";
+    } else if (gameState.momoLove < 95) {
+        momoLoveBar.className = "progress-fill bg-green-400";
+        momoLoveEmoji.textContent = "❤️";
+    } else {
+        momoLoveBar.className = "progress-fill bg-green-500";
+        momoLoveEmoji.textContent = "💖";
+    }
+    
+    // 叩叩心情值颜色和表情
+    if (gameState.kokoMood < 30) {
+        kokoMoodBar.className = "progress-fill bg-red-500";
+        kokoMoodEmoji.textContent = "😰";
+    } else if (gameState.kokoMood < 60) {
+        kokoMoodBar.className = "progress-fill bg-orange-400";
+        kokoMoodEmoji.textContent = "😓";
+    } else if (gameState.kokoMood < 80) {
+        kokoMoodBar.className = "progress-fill bg-yellow-400";
+        kokoMoodEmoji.textContent = "😅";
+    } else {
+        kokoMoodBar.className = "progress-fill bg-green-400";
+        kokoMoodEmoji.textContent = "😌";
+    }
+}
+
+// 更新魔魔的反馈
+function updateMomoFeedback() {
+    // 根据魔魔心情值获取对应的反馈
+    const feedback = momoFeedbacks.find(f => gameState.momoMood >= f.min && gameState.momoMood <= f.max);
+    
+    // 更新场景描述
+    sceneDescription.textContent = feedback.text;
+    
+    // 更新魔魔的对话
+    if (gameState.momoMood < 40) {
+        // 在心情低时，显示负面对话
+        const randomIndex = Math.floor(Math.random() * momoNegativePhrases.length);
+        momoQuote.textContent = `"${momoNegativePhrases[randomIndex]}"`;
+    } else if (gameState.momoMood >= 80) {
+        // 在心情高时，显示正面对话
+        const randomIndex = Math.floor(Math.random() * momoPositivePhrases.length);
+        momoQuote.textContent = `"${momoPositivePhrases[randomIndex]}"`;
+    } else {
+        // 在中间状态时，显示反馈中的对话
+        momoQuote.textContent = `"${feedback.phrase}"`;
+    }
+}
+
+// 生成随机选项
+function generateOptions() {
+    // 清空选项容器
+    optionsContainer.innerHTML = '';
+    
+    // 选择4个不同的选项
+    const selectedOptions = [];
+    const optionCount = 4;
+    
+    // 始终包含一个符合当前需求的选项
+    const needOptions = optionPool.filter(option => option.type === gameState.currentNeed && option.mood > 0);
+    if (needOptions.length > 0) {
+        const randomNeedOption = needOptions[Math.floor(Math.random() * needOptions.length)];
+        selectedOptions.push(randomNeedOption);
+    }
+    
+    // 填充剩余选项
+    while (selectedOptions.length < optionCount) {
+        const randomIndex = Math.floor(Math.random() * optionPool.length);
+        const option = optionPool[randomIndex];
+        
+        // 确保没有重复选项
+        if (!selectedOptions.some(selected => selected.text === option.text)) {
+            selectedOptions.push(option);
+        }
+    }
+    
+    // 打乱选项顺序
+    shuffleArray(selectedOptions);
+    
+    // 创建选项按钮
+    selectedOptions.forEach(option => {
+        const button = document.createElement('button');
+        button.className = 'option-btn w-full p-3 mb-2 text-left border border-gray-200 rounded hover:bg-blue-50 transition';
+        button.textContent = option.text;
+        
+        // 添加选项事件
+        button.addEventListener('click', () => {
+            handleOptionSelect(option);
+        });
+        
+        optionsContainer.appendChild(button);
+    });
+}
+
+// 处理选项选择
+function handleOptionSelect(option) {
+    // 停止计时器
+    clearInterval(timerInterval);
+    timerBar.classList.remove('timer-active');
+    
+    // 计算选项效果
+    let moodEffect = option.mood;
+    let loveEffect = option.love;
+    
+    // 检查是否与当前需求匹配
+    const isMatchingNeed = option.type === gameState.currentNeed;
+    
+    // 如果匹配需求，效果提升
+    if (isMatchingNeed) {
+        moodEffect = Math.floor(moodEffect * 1.5);
+        loveEffect = Math.floor(loveEffect * 1.3);
+    }
+    
+    // 检查是否重复使用同类型选项
+    if (gameState.lastOptionType === option.type) {
+        // 记录重复次数
+        gameState.repeatedOptions[option.type] = (gameState.repeatedOptions[option.type] || 0) + 1;
+        
+        // 根据重复次数降低效果
+        const repeatFactor = Math.max(0.3, 1 - (gameState.repeatedOptions[option.type] * 0.3));
+        moodEffect = Math.floor(moodEffect * repeatFactor);
+        loveEffect = Math.floor(loveEffect * repeatFactor);
+    } else {
+        // 重置该类型的重复计数
+        gameState.repeatedOptions[option.type] = 0;
+    }
+    
+    // 如果魔魔心情低于40，效果减半
+    if (gameState.momoMood < 40) {
+        moodEffect = Math.floor(moodEffect / 2);
+        loveEffect = Math.floor(loveEffect / 2);
+    }
+    
+    // 更新游戏状态
+    gameState.momoMood = Math.max(0, Math.min(100, gameState.momoMood + moodEffect));
+    gameState.momoLove = Math.max(0, Math.min(100, gameState.momoLove + loveEffect));
+    gameState.kokoMood = Math.max(0, Math.min(100, gameState.kokoMood + option.self));
+    gameState.lastOptionType = option.type;
+    
+    // 更新状态栏
+    updateStatusBars();
+    
+    // 继续游戏
+    continueGame();
+}
+
+// 继续游戏
+function continueGame() {
+    // 增加回合数
+    gameState.round++;
+    
+    // 更新回合显示
+    roundCounter.textContent = `第${gameState.round}/${gameState.maxRounds}轮`;
+    
+    // 检查游戏是否结束
+    if (gameState.round >= gameState.maxRounds) {
+        endGame();
+        return;
+    }
+    
+    // 随机降低魔魔的心情（困难模式特性）
+    const moodDecay = Math.floor(Math.random() * 5) + 3; // 3-7点衰减
+    gameState.momoMood = Math.max(0, gameState.momoMood - moodDecay);
+    
+    // 更新状态栏
+    updateStatusBars();
+    
+    // 可能触发随机事件
+    if (Math.random() < 0.3) { // 30%几率触发随机事件
+        triggerRandomEvent();
+    } else {
+        // 生成新的需求和选项
+        generateNewNeed();
+        generateOptions();
+        
+        // 开始新一轮计时
+        startTimer();
+    }
+}
+
+// 触发随机事件
+function triggerRandomEvent() {
+    // 选择一个随机事件
+    const randomEvent = randomEventsData[Math.floor(Math.random() * randomEventsData.length)];
+    
+    // 更新事件计数
+    gameState.eventCount++;
+    
+    // 显示事件通知
+    eventTitle.textContent = randomEvent.title;
+    eventDesc.textContent = randomEvent.desc;
+    eventNotification.classList.remove('hidden');
+    eventNotification.classList.add('event-notification');
+    
+    // 应用事件效果
+    gameState.momoMood = Math.max(0, gameState.momoMood + randomEvent.moodEffect);
+    gameState.momoLove = Math.max(0, gameState.momoLove + randomEvent.loveEffect);
+    
+    // 更新状态栏
+    updateStatusBars();
+    
+    // 3秒后隐藏通知并继续游戏
+    setTimeout(() => {
+        eventNotification.classList.add('hidden');
+        eventNotification.classList.remove('event-notification');
+        
+        // 生成新的需求和选项
+        generateNewNeed();
+        generateOptions();
+        
+        // 开始新一轮计时
+        startTimer();
+    }, 3000);
+}
+
+// 生成新的需求
+function generateNewNeed() {
+    // 获取所有需求类型
+    const needTypes = Object.values(optionTypes);
+    
+    // 随机选择一个需求（避免重复）
+    let newNeed;
+    do {
+        newNeed = needTypes[Math.floor(Math.random() * needTypes.length)];
+    } while (newNeed === gameState.currentNeed);
+    
+    gameState.currentNeed = newNeed;
+    
+    // 更新需求显示
+    currentNeedElement.textContent = needDescriptions[newNeed];
+}
+
+// 开始计时器
+function startTimer() {
+    // 重置计时器
+    timeLeft = gameState.timerDuration;
+    timerText.textContent = `剩余时间: ${timeLeft}秒`;
+    
+    // 重置计时器样式
+    timerBar.style.animationDuration = `${gameState.timerDuration}s`;
+    timerBar.classList.add('timer-active');
+    
+    // 清除之前的计时器
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    // 启动计时器
+    timerInterval = setInterval(() => {
+        timeLeft--;
+        timerText.textContent = `剩余时间: ${timeLeft}秒`;
+        
+        if (timeLeft <= 0) {
+            // 计时结束
+            clearInterval(timerInterval);
+            handleTimeout();
+        }
+    }, 1000);
+}
+
+// 处理超时
+function handleTimeout() {
+    // 增加超时计数
+    gameState.timeoutCount++;
+    
+    // 因为超时没有做出选择，降低魔魔心情和好感
+    gameState.momoMood = Math.max(0, gameState.momoMood - 10);
+    gameState.momoLove = Math.max(0, gameState.momoLove - 8);
+    gameState.kokoMood = Math.max(0, gameState.kokoMood - 5);
+    
+    // 更新状态栏
+    updateStatusBars();
+    
+    // 继续游戏
+    continueGame();
+}
+
+// 结束游戏
+function endGame() {
+    // 停止计时器
+    if (timerInterval) {
+        clearInterval(timerInterval);
+    }
+    
+    // 隐藏游戏主界面，显示结果界面
+    mainGameScreen.classList.add('hidden');
+    resultScreen.classList.remove('hidden');
+    
+    // 设置最终指标
+    finalMomoMood.textContent = gameState.momoMood;
+    finalMomoLove.textContent = gameState.momoLove;
+    finalKokoMood.textContent = gameState.kokoMood;
+    
+    // 设置最终表情
+    updateFinalEmojis();
+    
+    // 设置游戏数据
+    totalActions.textContent = gameState.round;
+    randomEventsElement.textContent = gameState.eventCount;
+    timeoutCount.textContent = gameState.timeoutCount;
+    
+    // 判断游戏结果
+    const victory = gameState.momoMood >= 95 && gameState.momoLove >= 95;
+    const goodEnding = gameState.momoMood >= 80 && gameState.momoLove >= 80;
+    const neutralEnding = gameState.momoMood >= 60 && gameState.momoLove >= 60;
+    
+    // 设置结果描述
+    if (victory) {
+        resultTitle.textContent = "完美胜利！";
+        resultDesc.textContent = "恭喜你成功哄好了魔魔！她现在非常开心，对你的喜爱达到了新高度！你是哄女友专家！";
+        resultBorder.className = "border-l-4 border-green-500 pl-3 mb-6";
+        document.getElementById('momo-final-quote').textContent = `"叩叩最棒了！你总是知道怎么让我开心！爱你哦～"`;
+    } else if (goodEnding) {
+        resultTitle.textContent = "和好成功！";
+        resultDesc.textContent = "你成功化解了这场危机，魔魔已经不再生气。她似乎很满意你的表现！";
+        resultBorder.className = "border-l-4 border-blue-500 pl-3 mb-6";
+        document.getElementById('momo-final-quote').textContent = `"还算有点良心～知道怎么哄我开心！"`;
+    } else if (neutralEnding) {
+        resultTitle.textContent = "勉强和好";
+        resultDesc.textContent = "魔魔的情绪有所缓和，但她还是有些不满。你需要继续努力修复这段关系。";
+        resultBorder.className = "border-l-4 border-yellow-500 pl-3 mb-6";
+        document.getElementById('momo-final-quote').textContent = `"好吧，我原谅你这一次。不过下次不许这样了！"`;
+    } else {
+        resultTitle.textContent = "失败告终";
+        resultDesc.textContent = "魔魔还是很生气，她说需要冷静一下。这次的危机处理并不成功，你需要反思自己的沟通方式。";
+        resultBorder.className = "border-l-4 border-red-500 pl-3 mb-6";
+        document.getElementById('momo-final-quote').textContent = `"不想理你了！我需要自己冷静一下..."`;
+    }
+}
+
+// 更新最终结果表情
+function updateFinalEmojis() {
+    // 魔魔心情表情
+    if (gameState.momoMood < 30) {
+        finalMomoEmoji.textContent = "😡";
+    } else if (gameState.momoMood < 60) {
+        finalMomoEmoji.textContent = "😠";
+    } else if (gameState.momoMood < 80) {
+        finalMomoEmoji.textContent = "😐";
+    } else if (gameState.momoMood < 95) {
+        finalMomoEmoji.textContent = "😊";
+    } else {
+        finalMomoEmoji.textContent = "😍";
+    }
+    
+    // 魔魔喜欢叩叩表情
+    if (gameState.momoLove < 30) {
+        finalLoveEmoji.textContent = "💔";
+    } else if (gameState.momoLove < 60) {
+        finalLoveEmoji.textContent = "❤️‍🩹";
+    } else if (gameState.momoLove < 80) {
+        finalLoveEmoji.textContent = "💓";
+    } else if (gameState.momoLove < 95) {
+        finalLoveEmoji.textContent = "❤️";
+    } else {
+        finalLoveEmoji.textContent = "💖";
+    }
+    
+    // 叩叩心情表情
+    if (gameState.kokoMood < 30) {
+        finalKokoEmoji.textContent = "😰";
+    } else if (gameState.kokoMood < 60) {
+        finalKokoEmoji.textContent = "😓";
+    } else if (gameState.kokoMood < 80) {
+        finalKokoEmoji.textContent = "😅";
+    } else {
+        finalKokoEmoji.textContent = "😌";
+    }
+}
+
+// 辅助函数：随机打乱数组
+function shuffleArray(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+}
+
+// 初始化游戏
+function initGame() {
+    console.log('Game initialization started');
+    
+    // 重置游戏状态
+    gameState.momoMood = 30;
+    gameState.momoLove = 30;
+    gameState.kokoMood = 30;
+    gameState.gameOver = false;
+    gameState.round = 0;
+    gameState.timeoutCount = 0;
+    gameState.eventCount = 0;
+    gameState.lastOptionType = null;
+    gameState.repeatedOptions = {};
+    
+    // 显示游戏界面，隐藏结果界面
+    startScreen.classList.add('hidden');
+    mainGameScreen.classList.remove('hidden');
+    resultScreen.classList.add('hidden');
+    
+    // 更新状态栏
+    updateStatusBars();
+    
+    // 生成初始需求
+    generateNewNeed();
+    
+    // 生成初始选项
+    generateOptions();
+    
+    // 开始计时
+    startTimer();
+}
+
+// 页面加载完成后，显示开始界面并添加事件监听
+document.addEventListener('DOMContentLoaded', () => {
+    // 显示正确的初始界面
+    startScreen.classList.remove('hidden');
+    mainGameScreen.classList.add('hidden');
+    resultScreen.classList.add('hidden');
+    
+    // 确保按钮存在后再添加事件监听
+    if (startGameBtn) {
+        startGameBtn.addEventListener('click', initGame);
+        console.log('Start game button event listener added');
+    } else {
+        console.error('Start game button not found');
+    }
+    
+    if (restartGameBtn) {
+        restartGameBtn.addEventListener('click', initGame);
+        console.log('Restart game button event listener added');
+    } else {
+        console.error('Restart game button not found');
+    }
+    
+    // 调试日志
+    console.log('Game initialized and ready to start');
+});
+    </script>
