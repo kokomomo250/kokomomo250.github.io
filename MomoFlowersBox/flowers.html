@@ -1,812 +1,974 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>超现代风格花卉盲盒</title>
-  
-  <!-- Tailwind CSS CDN -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/3.3.3/tailwind.min.css" rel="stylesheet">
-  
-  <!-- Font Awesome Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-  
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
-  <style>
-    /* 自定义样式 */
-    body {
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(135deg, #f4f8fb 0%, #f0f4f8 100%);
-    }
-    
-    .gradient-border:focus {
-      outline: none;
-      border-color: transparent;
-      box-shadow: 0 0 0 2px rgba(255, 105, 180, 0.5);
-      background: linear-gradient(#fff, #fff) padding-box,
-                 linear-gradient(135deg, #FF69B4 0%, #9370DB 100%) border-box;
-    }
-    
-    .flower-box {
-      background: rgba(255, 255, 255, 0.8);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-    
-    .flower-reveal {
-      transform-style: preserve-3d;
-      transition: transform 1s ease-in-out;
-    }
-    
-    .flower-reveal.open {
-      transform: rotateY(180deg);
-    }
-    
-    .flower-reveal .front,
-    .flower-reveal .back {
-      backface-visibility: hidden;
-      transition: all 0.6s ease;
-    }
-    
-    .flower-reveal .back {
-      transform: rotateY(180deg);
-    }
-    
-    .btn-glow {
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .btn-glow:after {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(135deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.2) 100%);
-      transform: rotate(30deg);
-      transition: all 0.3s ease-out;
-      opacity: 0;
-    }
-    
-    .btn-glow:hover:after {
-      opacity: 1;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>魔魔的神秘花卉盲盒</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #f472b6;
+            --secondary-color: #ec4899;
+            --accent-color: #be185d;
+            --text-color: #831843;
+        }
+        
+        body {
+            background-color: #fffbf5;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: background-color 0.5s ease;
+        }
 
-    /* 粒子动画 */
-    .particle {
-      position: absolute;
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background-color: rgba(255, 105, 180, 0.7);
-      pointer-events: none;
-      opacity: 0;
-    }
+        .gift-box {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
 
-    @keyframes fadeInOut {
-      0% { opacity: 0; transform: scale(0.5) translate(0, 0); }
-      50% { opacity: 1; }
-      100% { opacity: 0; transform: scale(1.5) translate(var(--tx), var(--ty)); }
-    }
+        .gift-box:hover {
+            transform: scale(1.05);
+        }
 
-    /* 限时开启倒计时样式 */
-    .countdown {
-      background: linear-gradient(135deg, #FF69B4 0%, #9370DB 100%);
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-    }
+        .gift-box .lid {
+            position: absolute;
+            width: 100%;
+            height: 40px;
+            top: -20px;
+            background-color: var(--primary-color);
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            z-index: 10;
+        }
 
-    /* 花卉图鉴样式 */
-    .collection-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 1rem;
-    }
+        .gift-box .lid:before {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 30px;
+            background-color: var(--accent-color);
+            top: -15px;
+            left: 80px;
+            border-radius: 5px;
+        }
 
-    /* 稀有度标识 */
-    .rarity-common {
-      background: linear-gradient(135deg, #94c5f8 0%, #a6e6ff 100%);
-    }
-    .rarity-uncommon {
-      background: linear-gradient(135deg, #b0ff9d 0%, #71e075 100%);
-    }
-    .rarity-rare {
-      background: linear-gradient(135deg, #cc99ff 0%, #a64dff 100%);
-    }
-    .rarity-legendary {
-      background: linear-gradient(135deg, #ffcc66 0%, #ff9933 100%);
-    }
-  </style>
+        .gift-box .box {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: var(--secondary-color);
+            border-radius: 5px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.3);
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        .gift-box .ribbon {
+            position: absolute;
+            width: 30px;
+            height: 200px;
+            background-color: var(--accent-color);
+            left: 85px;
+            z-index: 2;
+        }
+
+        .gift-box .ribbon:before {
+            content: '';
+            position: absolute;
+            width: 200px;
+            height: 30px;
+            background-color: var(--accent-color);
+            top: 85px;
+            left: -85px;
+        }
+
+        .box-open .lid {
+            transform: translateY(-50px) rotateZ(-20deg);
+            opacity: 0;
+        }
+
+        .box-open .box {
+            transform: scale(0.8);
+            opacity: 0;
+        }
+
+        .flower-container {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            transition-delay: 0.5s;
+        }
+
+        .box-open .flower-container {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .flower-img {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+            box-shadow: 0 0 20px rgba(244, 114, 182, 0.6);
+        }
+
+        .flower-info {
+            position: absolute;
+            width: 300px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            top: 160px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.5s ease;
+            transition-delay: 0.8s;
+            z-index: 20;
+        }
+
+        .box-open .flower-info {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .rareness {
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        .rareness i {
+            color: #f59e0b;
+        }
+
+        .history-item {
+            transition: all 0.3s ease;
+        }
+
+        .history-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: white;
+            box-shadow: 0 0 10px white, 0 0 20px var(--primary-color);
+            animation: sparkle 0.8s linear forwards;
+            z-index: 100;
+        }
+
+        @keyframes sparkle {
+            0% {
+                opacity: 1;
+                transform: scale(0);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.5);
+            }
+        }
+
+        .disabled {
+            position: relative;
+            cursor: not-allowed;
+        }
+
+        .disabled:after {
+            content: '今天已经开启过啦，明天再来吧~';
+            position: absolute;
+            width: 200px;
+            text-align: center;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .disabled:hover:after {
+            opacity: 1;
+        }
+
+        .btn-reset {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--accent-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+        }
+
+        .btn-reset:hover {
+            transform: rotate(180deg);
+        }
+
+        .box-open .btn-reset {
+            opacity: 1;
+        }
+        
+        /* Animation for flower entry */
+        @keyframes floatIn {
+            0% {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .float-in {
+            animation: floatIn 0.5s forwards;
+        }
+        
+        /* Customize scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f9e6f3;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background-color: var(--primary-color);
+            border-radius: 20px;
+        }
+    </style>
 </head>
-
-<body class="min-h-screen">
-  <div class="container max-w-5xl mx-auto px-4 py-8">
-    <!-- 页眉 -->
-    <header class="mb-12 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-2 bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-purple-600">神秘花卉盲盒</h1>
-      <p class="text-gray-600 max-w-xl mx-auto">每天开启一次，发现世界上最独特的花卉。记录、收藏并了解自然的奇妙。</p>
+<body class="min-h-screen flex flex-col">
+    <header class="text-center py-6 px-4">
+        <h1 class="text-3xl md:text-4xl font-bold text-pink-600">💐 魔魔的神秘花卉盲盒 💐</h1>
+        <p class="text-pink-500 mt-2">每天打开一次，发现美丽花卉的奇妙世界</p>
     </header>
-    
-    <!-- 主内容区 -->
-    <main class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-      
-      <!-- 左侧：盲盒区域 -->
-      <div class="flower-box rounded-2xl p-6 shadow-lg transform transition-all duration-300 hover:shadow-xl col-span-1 lg:col-span-2">
-        <!-- 开启状态 -->
-        <div class="mb-4 flex justify-between items-center">
-          <div>
-            <span class="text-sm text-gray-500"><i class="fas fa-clock mr-2"></i>今日开启状态:</span>
-            <span id="status-badge" class="ml-2 inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
-              可开启
-            </span>
-          </div>
-          <div class="countdown text-xl font-semibold hidden" id="countdown">23:59:59</div>
-        </div>
-        
-        <!-- 盲盒展示区 -->
-        <div class="w-full max-w-md mx-auto aspect-square relative perspective">
-          <div id="flower-reveal" class="flower-reveal w-full h-full relative cursor-pointer">
-            <!-- 盲盒正面 -->
-            <div class="front absolute w-full h-full rounded-xl flex justify-center items-center bg-gradient-to-br from-pink-200 to-pink-300 shadow-md">
-              <div class="text-center p-6">
-                <div class="w-32 h-32 mx-auto mb-4 bg-white rounded-full shadow-inner flex justify-center items-center">
-                  <i class="fas fa-gift text-5xl text-pink-500"></i>
-                </div>
-                <h3 class="text-xl font-semibold text-pink-800">点击开启今日盲盒</h3>
-                <p class="text-sm text-pink-600 mt-2">发现一朵独特的花</p>
-              </div>
+
+    <main class="flex-grow flex flex-col items-center justify-center px-4 py-8 relative">
+        <div class="gift-box" id="giftBox">
+            <div class="lid"></div>
+            <div class="box"></div>
+            <div class="ribbon"></div>
+            <div class="flower-container">
+                <img src="" alt="神秘花卉" class="flower-img" id="flowerImage">
             </div>
+            <div class="btn-reset" id="resetBtn">
+                <i class="fas fa-redo-alt"></i>
+            </div>
+        </div>
+
+        <div class="flower-info" id="flowerInfo">
+            <h2 class="text-xl font-bold text-pink-600" id="flowerName"></h2>
+            <p class="text-sm text-gray-500 italic" id="flowerScientific"></p>
+            <div class="rareness" id="flowerRareness"></div>
+            <p class="mt-3 text-gray-700" id="flowerDescription"></p>
+        </div>
+
+        <div class="mt-8 max-w-4xl w-full">
+            <h3 class="text-xl font-semibold text-pink-600 mb-4 flex items-center">
+                <i class="fas fa-history mr-2"></i>已发现的花卉
+                <span class="ml-2 text-sm bg-pink-100 text-pink-800 px-2 py-1 rounded-full" id="discoveryCount">0/50</span>
+            </h3>
             
-            <!-- 盲盒背面（花的展示） -->
-            <div class="back absolute w-full h-full rounded-xl flex justify-center items-center bg-white shadow-lg" id="flower-result">
-              <!-- 内容将由JavaScript动态填充 -->
-              <div class="text-center p-4">
-                <div class="w-40 h-40 mx-auto mb-4 rounded-full shadow overflow-hidden">
-                  <img id="flower-image" class="w-full h-full object-cover" src="https://source.unsplash.com/featured/?flower,rose" alt="花卉图片">
-                </div>
-                <div class="relative">
-                  <span id="flower-rarity" class="absolute -top-3 right-0 px-2 py-1 rounded-full text-white text-xs rarity-rare">稀有</span>
-                  <h3 id="flower-name" class="text-2xl font-semibold text-gray-800">蓝色妖姬</h3>
-                  <p id="flower-latin" class="text-sm italic text-gray-500 mb-2">Rosa hybrida</p>
-                </div>
-                <p id="flower-desc" class="text-sm text-gray-600 mb-4">蓝色妖姬是经过特殊处理的蓝色玫瑰，神秘优雅，代表着不可能的奇迹。</p>
-                <div class="flex justify-center space-x-4 text-sm">
-                  <span class="inline-flex items-center">
-                    <i class="fas fa-heart text-pink-500 mr-1"></i>
-                    <span id="flower-meaning">爱情、奇迹</span>
-                  </span>
-                  <span class="inline-flex items-center">
-                    <i class="fas fa-palette text-purple-500 mr-1"></i>
-                    <span id="flower-color">蓝色</span>
-                  </span>
-                </div>
-              </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="historyContainer">
+                <!-- 历史记录将在这里动态生成 -->
             </div>
-          </div>
-          
-          <!-- 粒子效果容器 -->
-          <div id="particles-container" class="absolute inset-0 pointer-events-none"></div>
         </div>
-        
-        <!-- 操作按钮 -->
-        <div class="mt-6 flex justify-center space-x-4">
-          <button id="open-btn" class="btn-glow relative px-6 py-2 rounded-full bg-gradient-to-r from-pink-500 to-pink-600 text-white font-medium transform transition-all duration-300 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-opacity-50">
-            开启盲盒
-          </button>
-          <button id="reset-btn" class="btn-glow relative px-6 py-2 rounded-full bg-white text-pink-600 border border-pink-200 font-medium transform transition-all duration-300 hover:scale-105 focus:outline-none hidden">
-            重置盲盒
-          </button>
-        </div>
-      </div>
-      
-      <!-- 右侧：花卉信息和历史记录 -->
-      <div class="space-y-6">
-        <!-- 花卉图鉴 -->
-        <div class="flower-box rounded-2xl p-6 shadow-lg transform transition-all duration-300 hover:shadow-xl">
-          <h2 class="text-xl font-semibold mb-4 flex items-center">
-            <i class="fas fa-book text-purple-500 mr-2"></i>我的花卉图鉴
-          </h2>
-          <div class="collection-grid" id="collection">
-            <!-- 示例收藏的花 -->
-            <div class="bg-white rounded-lg p-2 shadow text-center transform transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer">
-              <div class="w-full aspect-square rounded-lg overflow-hidden mb-2">
-                <img src="https://source.unsplash.com/featured/?flower,tulip" alt="郁金香" class="w-full h-full object-cover">
-              </div>
-              <div class="text-sm font-medium">郁金香</div>
-              <div class="text-xs text-gray-500">已获得</div>
-            </div>
-            <!-- 示例锁定的花位 -->
-            <div class="bg-gray-100 rounded-lg p-2 shadow text-center opacity-50">
-              <div class="w-full aspect-square rounded-lg overflow-hidden mb-2 bg-gray-200 flex justify-center items-center">
-                <i class="fas fa-lock text-gray-400"></i>
-              </div>
-              <div class="text-sm font-medium">未解锁</div>
-              <div class="text-xs text-gray-500">继续探索</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- 历史记录 -->
-        <div class="flower-box rounded-2xl p-6 shadow-lg transform transition-all duration-300 hover:shadow-xl">
-          <h2 class="text-xl font-semibold mb-4 flex items-center">
-            <i class="fas fa-history text-purple-500 mr-2"></i>开启历史
-          </h2>
-          <div class="space-y-3" id="history">
-            <!-- 历史记录条目将在此动态添加 -->
-            <div class="bg-white rounded-lg p-3 shadow flex items-center space-x-3 transform transition-all duration-300 hover:shadow-md">
-              <div class="w-12 h-12 rounded-full overflow-hidden bg-pink-100 flex-shrink-0">
-                <img src="https://source.unsplash.com/featured/?flower,daisy" alt="菊花" class="w-full h-full object-cover">
-              </div>
-              <div class="flex-grow">
-                <div class="flex justify-between">
-                  <div class="font-medium">菊花</div>
-                  <div class="text-xs text-gray-500">今天</div>
-                </div>
-                <div class="text-xs text-gray-600">长寿、高贵</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
     </main>
-    
-    <!-- 页脚 -->
-    <footer class="mt-12 text-center text-gray-500 text-sm">
-      <p>&copy; 2025 花卉盲盒 | 每日探索自然的奇妙</p>
+
+    <footer class="text-center py-4 text-pink-500 text-sm">
+        <p>用爱❤️精心制作 | 献给亲爱的魔魔</p>
     </footer>
-  </div>
-  
-  <!-- 花卉数据库 -->
-  <script>
-    // 花卉数据库
-    const flowers = [
-      {
-        id: 1,
-        name: "玫瑰",
-        latinName: "Rosa",
-        description: "玫瑰象征着爱情与浪漫，是最受欢迎的花卉之一。花朵丰满，花瓣层叠，香气醉人。",
-        rarity: "common",
-        color: "红色",
-        meaning: "爱情、热情",
-        image: "rose"
-      },
-      {
-        id: 2,
-        name: "蓝色妖姬",
-        latinName: "Rosa hybrida",
-        description: "蓝色妖姬是经过特殊处理的蓝色玫瑰，神秘优雅，代表着不可能的奇迹。",
-        rarity: "rare",
-        color: "蓝色",
-        meaning: "神秘、奇迹",
-        image: "blue,rose"
-      },
-      {
-        id: 3,
-        name: "向日葵",
-        latinName: "Helianthus annuus",
-        description: "向日葵总是追随太阳的方向，象征着忠诚和积极乐观的精神。",
-        rarity: "common",
-        color: "黄色",
-        meaning: "忠诚、活力",
-        image: "sunflower"
-      },
-      {
-        id: 4,
-        name: "兰花",
-        latinName: "Orchidaceae",
-        description: "兰花优雅高贵，形态各异，是世界上种类最多的花卉之一。",
-        rarity: "uncommon",
-        color: "多样",
-        meaning: "优雅、高贵",
-        image: "orchid"
-      },
-      {
-        id: 5,
-        name: "黑色郁金香",
-        latinName: "Tulipa",
-        description: "黑色郁金香实际上是深紫色，极为罕见，代表着独特与神秘。",
-        rarity: "legendary",
-        color: "深紫黑",
-        meaning: "神秘、力量",
-        image: "black,tulip"
-      },
-      {
-        id: 6,
-        name: "百合",
-        latinName: "Lilium",
-        description: "百合花优雅纯净，常用于婚礼和重要场合，象征着纯洁与祝福。",
-        rarity: "uncommon",
-        color: "白色",
-        meaning: "纯洁、庄严",
-        image: "lily"
-      },
-      {
-        id: 7,
-        name: "樱花",
-        latinName: "Prunus serrulata",
-        description: "樱花短暂而绚烂，象征着生命的脆弱与美丽。在日本文化中有着重要地位。",
-        rarity: "uncommon",
-        color: "粉色",
-        meaning: "生命、短暂的美",
-        image: "cherry,blossom"
-      },
-      {
-        id: 8,
-        name: "蒲公英",
-        latinName: "Taraxacum",
-        description: "蒲公英坚韧不拔，种子随风飘散，象征着希望和自由。",
-        rarity: "common",
-        color: "黄色",
-        meaning: "希望、梦想",
-        image: "dandelion"
-      },
-      {
-        id: 9,
-        name: "雪绒花",
-        latinName: "Leontopodium alpinum",
-        description: "雪绒花生长在高山上，代表着勇气和坚韧不拔的精神。",
-        rarity: "rare",
-        color: "白色",
-        meaning: "勇气、奉献",
-        image: "edelweiss"
-      },
-      {
-        id: 10,
-        name: "彼岸花",
-        latinName: "Lycoris radiata",
-        description: "彼岸花又称曼珠沙华，花叶永不相见，充满神秘色彩。",
-        rarity: "legendary",
-        color: "红色",
-        meaning: "离别、来世",
-        image: "red,spider,lily"
-      }
-    ];
 
-    // 扩展花卉数据集 - 动态生成更多花卉
-    const flowerTypes = [
-      "玉兰", "紫藤", "牡丹", "莲花", "桂花", "月季", "虞美人", "风信子", "郁金香", "康乃馨",
-      "菊花", "栀子花", "茉莉", "薰衣草", "芍药", "海棠", "紫罗兰", "绣球花", "杜鹃花", "昙花"
-    ];
+    <script>
+        // 花卉数据库
+        const flowers = [
+            {
+                name: "玫瑰",
+                scientific: "Rosa",
+                description: "玫瑰象征着爱情与美丽，就像我对你的爱一样热烈而永恒。每一片花瓣都承载着我对你的思念与温柔。",
+                rareness: 3,
+                keyword: "pink+rose"
+            },
+            {
+                name: "向日葵",
+                scientific: "Helianthus annuus",
+                description: "向日葵总是追随着太阳，就像我的心始终向着你。它代表着忠诚、阳光和幸福的笑容。",
+                rareness: 2,
+                keyword: "sunflower"
+            },
+            {
+                name: "郁金香",
+                scientific: "Tulipa",
+                description: "郁金香优雅高贵，象征着完美的爱情。它如同我对你的情感，纯洁而热烈，永不褪色。",
+                rareness: 3,
+                keyword: "tulip"
+            },
+            {
+                name: "兰花",
+                scientific: "Orchidaceae",
+                description: "兰花高雅脱俗，如同你的气质一般令人难以忘怀。它象征着高贵、优雅和无限的爱。",
+                rareness: 4,
+                keyword: "orchid"
+            },
+            {
+                name: "满天星",
+                scientific: "Gypsophila",
+                description: "满天星如同夜空中的繁星，点缀着我们的爱情。每一朵小花都是我对你爱的见证。",
+                rareness: 2,
+                keyword: "babys+breath"
+            },
+            {
+                name: "百合",
+                scientific: "Lilium",
+                description: "百合纯洁高贵，代表着纯净的爱与祝福。愿我们的爱情如百合般圣洁而持久。",
+                rareness: 3,
+                keyword: "lily+flower"
+            },
+            {
+                name: "勿忘我",
+                scientific: "Myosotis",
+                description: "这蓝色的小花承载着'请不要忘记我'的含义，就像我希望在你心中永远有我的位置。",
+                rareness: 3,
+                keyword: "forget+me+not"
+            },
+            {
+                name: "风信子",
+                scientific: "Hyacinthus",
+                description: "风信子带来春天的气息，象征着重生与希望。愿我们的爱情如同春天般充满生机。",
+                rareness: 3,
+                keyword: "hyacinth"
+            },
+            {
+                name: "雏菊",
+                scientific: "Bellis perennis",
+                description: "雏菊代表着纯真的爱与忠诚，它朴素而美丽，就像我对你纯粹的情感。",
+                rareness: 2,
+                keyword: "daisy+flower"
+            },
+            {
+                name: "紫罗兰",
+                scientific: "Viola",
+                description: "紫罗兰有着美丽的色彩和迷人的香气，象征着永恒的美丽与忠诚。",
+                rareness: 3,
+                keyword: "violet+flower"
+            },
+            {
+                name: "蝴蝶兰",
+                scientific: "Phalaenopsis",
+                description: "蝴蝶兰如同翩翩起舞的蝴蝶，代表着我对你的爱情如蝶般轻盈而美丽。",
+                rareness: 4,
+                keyword: "phalaenopsis+orchid"
+            },
+            {
+                name: "月季",
+                scientific: "Rosa chinensis",
+                description: "月季四季常开，象征着我对你的爱情不会因季节变换而改变，始终如一。",
+                rareness: 3,
+                keyword: "china+rose"
+            },
+            {
+                name: "牡丹",
+                scientific: "Paeonia suffruticosa",
+                description: "牡丹被誉为花中之王，富贵华丽。愿你如牡丹般绽放光彩，生活富足美满。",
+                rareness: 5,
+                keyword: "peony+flower"
+            },
+            {
+                name: "铃兰",
+                scientific: "Convallaria majalis",
+                description: "铃兰代表着幸福的归来与纯洁的爱情。它如同清脆的铃声，唤醒我心底的爱意。",
+                rareness: 4,
+                keyword: "lily+of+the+valley"
+            },
+            {
+                name: "薰衣草",
+                scientific: "Lavandula",
+                description: "薰衣草代表着等待爱情，它独特的香气如同我对你深沉而恒久的爱。",
+                rareness: 3,
+                keyword: "lavender"
+            },
+            {
+                name: "康乃馨",
+                scientific: "Dianthus caryophyllus",
+                description: "康乃馨象征着爱、魅力与尊敬。它热情而持久，如同我们的爱情永不凋零。",
+                rareness: 2,
+                keyword: "carnation"
+            },
+            {
+                name: "樱花",
+                scientific: "Prunus serrulata",
+                description: "樱花虽然短暂，却美丽绝伦，提醒我们要珍惜当下的每一刻，与你共同创造美好回忆。",
+                rareness: 4,
+                keyword: "cherry+blossom"
+            },
+            {
+                name: "梅花",
+                scientific: "Prunus mume",
+                description: "梅花在严冬中绽放，象征着坚强与希望。无论遇到什么困难，我们的爱都能战胜一切。",
+                rareness: 4,
+                keyword: "plum+blossom"
+            },
+            {
+                name: "栀子花",
+                scientific: "Gardenia jasminoides",
+                description: "栀子花纯白典雅，香气迷人，象征着我们纯净而又带着甜蜜的爱情。",
+                rareness: 3,
+                keyword: "gardenia"
+            },
+            {
+                name: "鸢尾花",
+                scientific: "Iris",
+                description: "鸢尾花代表着信仰、智慧与勇气。愿我们的爱情充满智慧，勇敢面对未来的挑战。",
+                rareness: 3,
+                keyword: "iris+flower"
+            },
+            {
+                name: "紫藤",
+                scientific: "Wisteria",
+                description: "紫藤花如瀑布般垂挂，浪漫而梦幻。它象征着深深的依恋与留恋，如同我对你的思念。",
+                rareness: 4,
+                keyword: "wisteria"
+            },
+            {
+                name: "荷花",
+                scientific: "Nelumbo nucifera",
+                description: "荷花出淤泥而不染，濯清涟而不妖。愿我们的爱情如荷花般纯洁无瑕，不被世俗沾染。",
+                rareness: 4,
+                keyword: "lotus+flower"
+            },
+            {
+                name: "杜鹃花",
+                scientific: "Rhododendron",
+                description: "杜鹃花色彩艳丽，象征着热情与永恒的美丽。它如同我对你热烈而不变的爱。",
+                rareness: 3,
+                keyword: "azalea+flower"
+            },
+            {
+                name: "茉莉花",
+                scientific: "Jasminum",
+                description: "茉莉花小巧而芳香，它的香气如同思念，缠绕在心头，久久不能散去。",
+                rareness: 3,
+                keyword: "jasmine+flower"
+            },
+            {
+                name: "秋海棠",
+                scientific: "Begonia grandis",
+                description: "秋海棠象征着思念与情思，它在秋天绽放，如同我在思念你时流露的情感。",
+                rareness: 3,
+                keyword: "begonia"
+            },
+            {
+                name: "油菜花",
+                scientific: "Brassica napus",
+                description: "油菜花金黄一片，象征着丰收与希望。愿我们的爱情如油菜花田般广阔而美丽。",
+                rareness: 2,
+                keyword: "rapeseed+flower"
+            },
+            {
+                name: "蒲公英",
+                scientific: "Taraxacum",
+                description: "蒲公英代表着希望与梦想，它的种子随风飘散，就像我的爱意随风飘向你。",
+                rareness: 1,
+                keyword: "dandelion"
+            },
+            {
+                name: "桂花",
+                scientific: "Osmanthus fragrans",
+                description: "桂花香气幽远，象征着成功与贵气。愿你如桂花般散发迷人魅力，生活处处飘香。",
+                rareness: 3,
+                keyword: "osmanthus+flower"
+            },
+            {
+                name: "昙花",
+                scientific: "Epiphyllum oxypetalum",
+                description: "昙花一现虽短暂，但它独特的美丽令人难忘。珍惜与你共度的每一刻，如同欣赏昙花。",
+                rareness: 5,
+                keyword: "queen+of+the+night+flower"
+            },
+            {
+                name: "矢车菊",
+                scientific: "Centaurea cyanus",
+                description: "矢车菊湛蓝如天空，象征着忠诚与可靠。我对你的爱如同这蓝色，深邃而真挚。",
+                rareness: 3,
+                keyword: "cornflower"
+            },
+            {
+                name: "紫丁香",
+                scientific: "Syringa",
+                description: "紫丁香代表着初恋的心动和美好回忆。它的芳香如同我对你的爱，淡雅而持久。",
+                rareness: 3,
+                keyword: "lilac+flower"
+            },
+            {
+                name: "翠菊",
+                scientific: "Callistephus chinensis",
+                description: "翠菊坚强而美丽，象征着坚贞不渝的爱。无论经历什么，我对你的心永不改变。",
+                rareness: 2,
+                keyword: "aster+flower"
+            },
+            {
+                name: "报春花",
+                scientific: "Primula vulgaris",
+                description: "报春花是春天的使者，象征着希望与新生。愿我们的爱如新春般充满希望与活力。",
+                rareness: 3,
+                keyword: "primrose+flower"
+            },
+            {
+                name: "水仙花",
+                scientific: "Narcissus",
+                description: "水仙花清新脱俗，象征着自我、重生与尊重。愿我们的爱情中充满相互尊重与支持。",
+                rareness: 3,
+                keyword: "daffodil"
+            },
+            {
+                name: "银莲花",
+                scientific: "Anemone",
+                description: "银莲花如同星辰般闪烁，代表着期待与希望。它如同我对你未来的美好期许。",
+                rareness: 4,
+                keyword: "anemone+flower"
+            },
+            {
+                name: "石竹",
+                scientific: "Dianthus",
+                description: "石竹花象征着大胆的爱与勇气。我愿意为你勇敢地表达爱意，不惧一切艰难。",
+                rareness: 2,
+                keyword: "pink+flower"
+            },
+            {
+                name: "虞美人",
+                scientific: "Papaver rhoeas",
+                description: "虞美人色彩艳丽，象征着安慰与希望。愿我能在你疲惫时给予支持与温暖。",
+                rareness: 3,
+                keyword: "red+poppy"
+            },
+            {
+                name: "三色堇",
+                scientific: "Viola tricolor",
+                description: "三色堇代表着思念与怀念。每当看到它，就会想起与你在一起的美好时光。",
+                rareness: 2,
+                keyword: "pansy+flower"
+            },
+            {
+                name: "金盏花",
+                scientific: "Calendula officinalis",
+                description: "金盏花象征着持久的爱与喜悦。它如同阳光般温暖，照亮我们的爱情旅程。",
+                rareness: 2,
+                keyword: "marigold+flower"
+            },
+            {
+                name: "绣球花",
+                scientific: "Hydrangea",
+                description: "绣球花华丽而丰满，象征着团圆与永恒的爱。愿我们的爱情如绣球般圆满丰盈。",
+                rareness: 3,
+                keyword: "hydrangea"
+            },
+            {
+                name: "木棉花",
+                scientific: "Bombax ceiba",
+                description: "木棉花热烈奔放，如同燃烧的火焰，象征着热情与勇敢。它如同我炽热的爱。",
+                rareness: 4,
+                keyword: "red+silk+cotton+flower"
+            },
+            {
+                name: "黑心菊",
+                scientific: "Rudbeckia hirta",
+                description: "黑心菊明亮而独特，象征着正义与公平。愿我们的爱情建立在相互尊重的基础上。",
+                rareness: 3,
+                keyword: "black+eyed+susan"
+            },
+            {
+                name: "龙胆花",
+                scientific: "Gentiana",
+                description: "龙胆花深蓝如海，象征着忧郁与永恒的爱。它的深邃如同我对你深不见底的爱意。",
+                rareness: 4,
+                keyword: "gentian+flower"
+            },
+            {
+                name: "小雏菊",
+                scientific: "Bellis",
+                description: "小雏菊纯真可爱，象征着天真与纯洁的爱。愿我们的爱情如小雏菊般单纯美好。",
+                rareness: 1,
+                keyword: "tiny+daisy"
+            },
+            {
+                name: "波斯菊",
+                scientific: "Cosmos bipinnatus",
+                description: "波斯菊轻盈飘逸，象征着和谐与平衡。愿我们的爱情如波斯菊般自由而和谐。",
+                rareness: 2,
+                keyword: "cosmos+flower"
+            },
+            {
+                name: "合欢花",
+                scientific: "Albizia julibrissin",
+                description: "合欢花柔美如丝，象征着团聚与思念。它如同我对你思念时的心情，柔软而温暖。",
+                rareness: 3,
+                keyword: "silk+tree+flower"
+            },
+            {
+                name: "山茶花",
+                scientific: "Camellia",
+                description: "山茶花坚韧而美丽，象征着坚持不懈的爱。无论寒冬，我的爱都会如山茶般绽放。",
+                rareness: 4,
+                keyword: "camellia+flower"
+            },
+            {
+                name: "蓝色妖姬",
+                scientific: "Rosa hybrida",
+                description: "蓝色妖姬神秘而独特，象征着不可能的爱情与奇迹。因为有你，一切奇迹都可能发生。",
+                rareness: 5,
+                keyword: "blue+rose"
+            },
+            {
+                name: "珊瑚花",
+                scientific: "Russelia equisetiformis",
+                description: "珊瑚花如同海底珊瑚，绚丽多彩。它象征着热情与活力，如同我对你热烈的爱。",
+                rareness: 3,
+                keyword: "coral+plant+flower"
+            }
+        ];
 
-    const latinNames = [
-      "Magnolia", "Wisteria", "Paeonia", "Nelumbo", "Osmanthus", "Rosa chinensis", "Papaver", "Hyacinthus",
-      "Tulipa", "Dianthus", "Chrysanthemum", "Gardenia", "Jasminum", "Lavandula", "Paeonia lactiflora", 
-      "Malus", "Viola", "Hydrangea", "Rhododendron", "Epiphyllum"
-    ];
+        // 获取DOM元素
+        const giftBox = document.getElementById('giftBox');
+        const resetBtn = document.getElementById('resetBtn');
+        const flowerImage = document.getElementById('flowerImage');
+        const flowerName = document.getElementById('flowerName');
+        const flowerScientific = document.getElementById('flowerScientific');
+        const flowerRareness = document.getElementById('flowerRareness');
+        const flowerDescription = document.getElementById('flowerDescription');
+        const historyContainer = document.getElementById('historyContainer');
+        const discoveryCount = document.getElementById('discoveryCount');
 
-    const meanings = [
-      "纯洁", "长寿", "富贵", "纯洁", "吉祥", "爱情", "安慰", "复活", "爱的表白", "母爱",
-      "长寿", "幸福", "清雅", "等待爱情", "羞怯", "温暖", "忠诚", "团圆", "热爱生命", "刹那之美"
-    ];
+        // 初始化本地存储
+        function initLocalStorage() {
+            if (!localStorage.getItem('flowerHistory')) {
+                localStorage.setItem('flowerHistory', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('lastOpenDate')) {
+                localStorage.setItem('lastOpenDate', '');
+            }
+            updateDiscoveryCount();
+        }
 
-    const colors = ["红色", "粉色", "白色", "黄色", "紫色", "蓝色", "橙色", "绿色", "粉白", "深红"];
-    const rarities = ["common", "common", "common", "uncommon", "uncommon", "rare", "rare", "legendary"];
-
-    // 生成更多花卉数据
-    for(let i = 0; i < flowerTypes.length; i++) {
-      flowers.push({
-        id: 11 + i,
-        name: flowerTypes[i],
-        latinName: latinNames[i],
-        description: `${flowerTypes[i]}花姿优美，${meanings[i]}是它的象征。在园艺与文化中都有重要地位。`,
-        rarity: rarities[Math.floor(Math.random() * rarities.length)],
-        color: colors[Math.floor(Math.random() * colors.length)],
-        meaning: meanings[i],
-        image: flowerTypes[i]
-      });
-    }
-    
-    // 主要功能实现
-    document.addEventListener('DOMContentLoaded', function() {
-      // 获取DOM元素
-      const flowerReveal = document.getElementById('flower-reveal');
-      const openBtn = document.getElementById('open-btn');
-      const resetBtn = document.getElementById('reset-btn');
-      const countdownEl = document.getElementById('countdown');
-      const statusBadge = document.getElementById('status-badge');
-      const particlesContainer = document.getElementById('particles-container');
-      const collectionEl = document.getElementById('collection');
-      const historyEl = document.getElementById('history');
-      
-      // 获取花卉信息展示元素
-      const flowerImage = document.getElementById('flower-image');
-      const flowerName = document.getElementById('flower-name');
-      const flowerLatin = document.getElementById('flower-latin');
-      const flowerDesc = document.getElementById('flower-desc');
-      const flowerRarity = document.getElementById('flower-rarity');
-      const flowerMeaning = document.getElementById('flower-meaning');
-      const flowerColor = document.getElementById('flower-color');
-      
-      // 应用程序状态
-      let canOpen = true;
-      let collection = [];
-      let history = [];
-      
-      // 加载本地存储数据
-      function loadLocalData() {
-        // 检查今天是否已开启
-        const lastOpenDate = localStorage.getItem('lastOpenDate');
-        const today = new Date().toDateString();
-        
-        if(lastOpenDate === today) {
-          canOpen = false;
-          updateStatusDisplay();
-          
-          // 显示倒计时
-          countdownEl.classList.remove('hidden');
-          updateCountdown();
-          setInterval(updateCountdown, 1000);
+        // 检查今天是否已经开盒
+        function checkIfOpenedToday() {
+            const today = new Date().toDateString();
+            const lastOpenDate = localStorage.getItem('lastOpenDate');
+            return today === lastOpenDate;
         }
         
-        // 加载收藏和历史
-        try {
-          const savedCollection = localStorage.getItem('flowerCollection');
-          if(savedCollection) {
-            collection = JSON.parse(savedCollection);
-            renderCollection();
-          }
-          
-          const savedHistory = localStorage.getItem('flowerHistory');
-          if(savedHistory) {
-            history = JSON.parse(savedHistory);
-            renderHistory();
-          }
-        } catch(e) {
-          console.error('Error loading saved data:', e);
+        // 更新发现计数
+        function updateDiscoveryCount() {
+            const history = JSON.parse(localStorage.getItem('flowerHistory') || '[]');
+            const uniqueFlowers = new Set(history.map(item => item.name));
+            discoveryCount.textContent = `${uniqueFlowers.size}/50`;
+            
+            // 如果集齐了50朵花，添加特殊效果
+            if (uniqueFlowers.size === 50) {
+                document.body.style.backgroundColor = '#fff0f8';
+                document.body.style.backgroundImage = 'url("https://source.unsplash.com/random/1920x1080/?flower,pattern")';
+                document.body.style.backgroundBlendMode = 'soft-light';
+                document.body.style.backgroundAttachment = 'fixed';
+            }
         }
-      }
-      
-      // 更新状态显示
-      function updateStatusDisplay() {
-        if(canOpen) {
-          statusBadge.className = 'ml-2 inline-block px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium';
-          statusBadge.textContent = '可开启';
-          openBtn.disabled = false;
-        } else {
-          statusBadge.className = 'ml-2 inline-block px-2 py-1 rounded-full bg-red-100 text-red-800 text-xs font-medium';
-          statusBadge.textContent = '今日已开启';
-          openBtn.disabled = true;
+        
+        // 创建闪光效果
+        function createSparkles(x, y) {
+            try {
+                const boxRect = giftBox.getBoundingClientRect();
+                const centerX = boxRect.left + boxRect.width / 2;
+                const centerY = boxRect.top + boxRect.height / 2;
+                
+                for (let i = 0; i < 10; i++) {
+                    const sparkle = document.createElement('div');
+                    sparkle.classList.add('sparkle');
+                    sparkle.style.left = `${centerX + (Math.random() * 100 - 50)}px`;
+                    sparkle.style.top = `${centerY + (Math.random() * 100 - 50)}px`;
+                    document.body.appendChild(sparkle);
+                    
+                    setTimeout(() => {
+                        if (sparkle.parentNode) {
+                            sparkle.remove();
+                        }
+                    }, 800);
+                }
+            } catch (error) {
+                console.error("创建闪光效果时出错:", error);
+            }
         }
-      }
-      
-      // 更新倒计时
-      function updateCountdown() {
-        const now = new Date();
-        const tomorrow = new Date(now);
-        tomorrow.setDate(tomorrow.getDate() + 1);
-        tomorrow.setHours(0, 0, 0, 0);
         
-        const diff = tomorrow - now;
-        const hours = Math.floor(diff / (1000 * 60 * 60));
-        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
-        
-        countdownEl.textContent = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-      }
-      
-      // 创建粒子效果
-      function createParticles() {
-        // 清除现有粒子
-        particlesContainer.innerHTML = '';
-        
-        // 创建新粒子
-        for(let i = 0; i < 30; i++) {
-          const particle = document.createElement('div');
-          particle.className = 'particle';
-          
-          // 随机位置和颜色
-          const centerX = particlesContainer.offsetWidth / 2;
-          const centerY = particlesContainer.offsetHeight / 2;
-          
-          particle.style.left = `${centerX}px`;
-          particle.style.top = `${centerY}px`;
-          
-          // 随机颜色
-          const colors = ['#FF69B4', '#9370DB', '#FFD700', '#87CEFA'];
-          particle.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-          
-          // 随机移动方向
-          const angle = Math.random() * Math.PI * 2;
-          const distance = 50 + Math.random() * 100;
-          const tx = Math.cos(angle) * distance;
-          const ty = Math.sin(angle) * distance;
-          
-          particle.style.setProperty('--tx', `${tx}px`);
-          particle.style.setProperty('--ty', `${ty}px`);
-          
-          // 随机大小
-          const size = 3 + Math.random() * 8;
-          particle.style.width = `${size}px`;
-          particle.style.height = `${size}px`;
-          
-          // 随机动画延迟
-          const delay = Math.random() * 0.5;
-          particle.style.animation = `fadeInOut 1s ease-out ${delay}s forwards`;
-          
-          particlesContainer.appendChild(particle);
+        // 重置盒子
+        function resetBox() {
+            giftBox.classList.remove('box-open');
+            setTimeout(() => {
+                if (checkIfOpenedToday()) {
+                    giftBox.classList.add('disabled');
+                }
+            }, 500);
         }
-      }
-      
-      // 开启盲盒
-      function openBox() {
-        if(!canOpen) return;
         
-        // 翻转动画
-        flowerReveal.classList.add('open');
+        // 随机获取一朵花
+        function getRandomFlower() {
+            try {
+                // 先尝试找出未发现的花
+                const history = JSON.parse(localStorage.getItem('flowerHistory') || '[]');
+                const discoveredFlowers = new Set(history.map(item => item.name));
+                
+                const undiscoveredFlowers = flowers.filter(flower => !discoveredFlowers.has(flower.name));
+                
+                console.log("未发现的花朵数量:", undiscoveredFlowers.length);
+                console.log("已发现的花朵数量:", discoveredFlowers.size);
+                
+                // 如果还有未发现的花，优先从中选择
+                if (undiscoveredFlowers.length > 0) {
+                    // 根据稀有度给予权重，稀有度高的出现概率较低
+                    const weightedFlowers = [];
+                    
+                    undiscoveredFlowers.forEach(flower => {
+                        // 稀有度越高，权重越低
+                        const weight = 6 - flower.rareness; // 5稀有度给1权重，1稀有度给5权重
+                        for (let i = 0; i < weight; i++) {
+                            weightedFlowers.push(flower);
+                        }
+                    });
+                    
+                    return weightedFlowers[Math.floor(Math.random() * weightedFlowers.length)];
+                } else {
+                    // 如果已经发现了所有花，则随机返回一朵
+                    return flowers[Math.floor(Math.random() * flowers.length)];
+                }
+            } catch (error) {
+                console.error("获取随机花卉时出错:", error);
+                // 发生错误时返回默认花卉
+                return flowers[0];
+            }
+        }
         
-        // 创建粒子效果
-        createParticles();
+        // 显示花卉
+        function displayFlower(flower) {
+            // 设置花卉信息
+            flowerName.textContent = flower.name;
+            flowerScientific.textContent = flower.scientific;
+            flowerDescription.textContent = flower.description;
+            
+            // 设置稀有度
+            flowerRareness.innerHTML = '';
+            for (let i = 0; i < 5; i++) {
+                const star = document.createElement('i');
+                star.classList.add('fas', i < flower.rareness ? 'fa-star' : 'fa-star-o');
+                flowerRareness.appendChild(star);
+            }
+            
+            // 根据稀有度添加标签
+            let rarenessText = '';
+            switch(flower.rareness) {
+                case 1: rarenessText = '普通'; break;
+                case 2: rarenessText = '常见'; break;
+                case 3: rarenessText = '稀有'; break;
+                case 4: rarenessText = '珍稀'; break;
+                case 5: rarenessText = '传说'; break;
+            }
+            
+            const rarenessTag = document.createElement('span');
+            rarenessTag.classList.add('ml-2', 'text-xs', 'px-2', 'py-1', 'rounded-full');
+            rarenessTag.textContent = rarenessText;
+            
+            // 根据稀有度设置颜色
+            const colors = [
+                'bg-gray-100 text-gray-800',    // 普通
+                'bg-green-100 text-green-800',  // 常见
+                'bg-blue-100 text-blue-800',    // 稀有
+                'bg-purple-100 text-purple-800', // 珍稀
+                'bg-yellow-100 text-yellow-800'  // 传说
+            ];
+            
+            rarenessTag.className += ' ' + colors[flower.rareness - 1];
+            flowerRareness.appendChild(rarenessTag);
+            
+            // 设置图片
+            flowerImage.src = `https://source.unsplash.com/featured/?${flower.keyword}`;
+            
+            // 保存到历史记录
+            const history = JSON.parse(localStorage.getItem('flowerHistory') || '[]');
+            history.push({
+                name: flower.name,
+                scientific: flower.scientific,
+                description: flower.description,
+                rareness: flower.rareness,
+                keyword: flower.keyword,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('flowerHistory', JSON.stringify(history));
+            
+            // 更新发现计数
+            updateDiscoveryCount();
+            
+            // 更新历史记录显示
+            updateHistoryDisplay();
+        }
         
-        // 随机选择一朵花
-        const randomFlower = flowers[Math.floor(Math.random() * flowers.length)];
+        // 更新历史记录显示
+        function updateHistoryDisplay() {
+            const history = JSON.parse(localStorage.getItem('flowerHistory') || '[]');
+            
+            // 清空容器
+            historyContainer.innerHTML = '';
+            
+            // 如果没有历史记录，显示提示
+            if (history.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.className = 'col-span-full text-center py-8 text-gray-500';
+                emptyMessage.textContent = '还没有发现任何花卉，点击礼盒开始探索吧！';
+                historyContainer.appendChild(emptyMessage);
+                return;
+            }
+            
+            // 按日期降序排序
+            history.sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            // 创建历史记录卡片
+            history.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'history-item bg-white rounded-lg overflow-hidden shadow-md';
+                
+                // 使用花卉关键词从Unsplash获取图片
+                const img = document.createElement('img');
+                img.src = `https://source.unsplash.com/featured/?${item.keyword}`;
+                img.alt = item.name;
+                img.className = 'w-full h-32 object-cover';
+                
+                const content = document.createElement('div');
+                content.className = 'p-3';
+                
+                const title = document.createElement('h4');
+                title.className = 'font-bold text-pink-600';
+                title.textContent = item.name;
+                
+                const date = document.createElement('p');
+                date.className = 'text-xs text-gray-500';
+                date.textContent = new Date(item.date).toLocaleDateString();
+                
+                const rareness = document.createElement('div');
+                rareness.className = 'flex items-center mt-1';
+                
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElement('i');
+                    star.className = `text-xs text-yellow-500 fas ${i < item.rareness ? 'fa-star' : 'fa-star-o'}`;
+                    rareness.appendChild(star);
+                }
+                
+                content.appendChild(title);
+                content.appendChild(date);
+                content.appendChild(rareness);
+                
+                card.appendChild(img);
+                card.appendChild(content);
+                
+                historyContainer.appendChild(card);
+            });
+        }
         
-        // 延迟显示花的信息
-        setTimeout(() => {
-          // 更新花卉信息
-          flowerImage.src = `https://source.unsplash.com/featured/?flower,${randomFlower.image}`;
-          flowerName.textContent = randomFlower.name;
-          flowerLatin.textContent = randomFlower.latinName;
-          flowerDesc.textContent = randomFlower.description;
-          flowerMeaning.textContent = randomFlower.meaning;
-          flowerColor.textContent = randomFlower.color;
-          
-          // 设置稀有度样式
-          flowerRarity.className = `absolute -top-3 right-0 px-2 py-1 rounded-full text-white text-xs rarity-${randomFlower.rarity}`;
-          
-          // 根据稀有度设置显示文本
-          const rarityText = {
-            'common': '普通',
-            'uncommon': '稀有',
-            'rare': '珍稀',
-            'legendary': '传说'
-          };
-          flowerRarity.textContent = rarityText[randomFlower.rarity];
-          
-          // 显示重置按钮
-          resetBtn.classList.remove('hidden');
-          
-          // 添加到收藏和历史
-          if(!collection.some(f => f.id === randomFlower.id)) {
-            collection.push(randomFlower);
-            localStorage.setItem('flowerCollection', JSON.stringify(collection));
-            renderCollection();
-          }
-          
-          // 添加到历史记录
-          const historyEntry = {
-            ...randomFlower,
-            date: new Date().toISOString()
-          };
-          history.unshift(historyEntry);
-          localStorage.setItem('flowerHistory', JSON.stringify(history));
-          renderHistory();
-          
-          // 更新开启状态
-          canOpen = false;
-          localStorage.setItem('lastOpenDate', new Date().toDateString());
-          updateStatusDisplay();
-          
-          // 显示倒计时
-          countdownEl.classList.remove('hidden');
-          updateCountdown();
-          setInterval(updateCountdown, 1000);
-        }, 500);
-      }
-      
-      // 重置盲盒
-      function resetBox() {
-        flowerReveal.classList.remove('open');
-        resetBtn.classList.add('hidden');
-      }
-      
-      // 渲染收藏
-      function renderCollection() {
-        // 清空现有内容
-        collectionEl.innerHTML = '';
+        // 开始动画
+        function openBox(event) {
+            console.log("盒子被点击");
+            
+            // 暂时注释掉每日限制功能，方便测试
+            // 如果今天已经开过盒子，不允许再开
+            // if (checkIfOpenedToday() && !giftBox.classList.contains('box-open')) {
+            //     giftBox.classList.add('disabled');
+            //     return;
+            // }
+            
+            // 如果盒子已经打开，则不执行任何操作
+            if (giftBox.classList.contains('box-open')) {
+                return;
+            }
+            
+            console.log("开始开启盒子");
+            
+            // 添加开启动画类
+            giftBox.classList.add('box-open');
+            
+            // 获取点击位置创建闪光效果
+            createSparkles(event.clientX, event.clientY);
+            
+            // 获取随机花卉
+            const flower = getRandomFlower();
+            console.log("选中的花卉:", flower.name);
+            
+            // 显示花卉
+            setTimeout(() => {
+                displayFlower(flower);
+                console.log("花卉已显示");
+            }, 500);
+            
+            // 记录今天已经开过盒子
+            localStorage.setItem('lastOpenDate', new Date().toDateString());
+        }
         
-        // 先显示已收集的花
-        collection.forEach(flower => {
-          const flowerEl = document.createElement('div');
-          flowerEl.className = 'bg-white rounded-lg p-2 shadow text-center transform transition-all duration-300 hover:shadow-md hover:scale-105 cursor-pointer';
-          flowerEl.innerHTML = `
-            <div class="w-full aspect-square rounded-lg overflow-hidden mb-2 relative">
-              <img src="https://source.unsplash.com/featured/?flower,${flower.image}" alt="${flower.name}" class="w-full h-full object-cover">
-<span class="absolute bottom-0 right-0 px-1 py-0.5 text-xs text-white rarity-${flower.rarity}">${flower.rarity === 'common' ? '普通' : flower.rarity === 'uncommon' ? '稀有' : flower.rarity === 'rare' ? '珍稀' : '传说'}</span>
-            </div>
-            <div class="text-sm font-medium">${flower.name}</div>
-            <div class="text-xs text-gray-500">已获得</div>
-          `;
-          
-          // 点击查看详情
-          flowerEl.addEventListener('click', () => {
-            showFlowerDetail(flower);
-          });
-          
-          collectionEl.appendChild(flowerEl);
+        // 绑定事件
+        giftBox.addEventListener('click', openBox);
+        resetBtn.addEventListener('click', function(e) {
+            e.stopPropagation(); // 防止事件冒泡触发盒子的点击事件
+            resetBox();
+        });
+
+        // 额外确保按钮和盒子上元素的点击事件正确传递
+        document.querySelectorAll('.gift-box .lid, .gift-box .box, .gift-box .ribbon').forEach(element => {
+            element.addEventListener('click', function(e) {
+                // 确保事件冒泡到giftBox
+                e.stopPropagation();
+                // 手动触发giftBox的点击事件
+                openBox(e);
+            });
         });
         
-        // 添加未解锁的格子
-        const totalFlowers = flowers.length;
-        const collectedFlowers = collection.length;
-        
-        for(let i = 0; i < Math.min(5, totalFlowers - collectedFlowers); i++) {
-          const placeholderEl = document.createElement('div');
-          placeholderEl.className = 'bg-gray-100 rounded-lg p-2 shadow text-center opacity-50';
-          placeholderEl.innerHTML = `
-            <div class="w-full aspect-square rounded-lg overflow-hidden mb-2 bg-gray-200 flex justify-center items-center">
-              <i class="fas fa-lock text-gray-400"></i>
-            </div>
-            <div class="text-sm font-medium">未解锁</div>
-            <div class="text-xs text-gray-500">继续探索</div>
-          `;
-          collectionEl.appendChild(placeholderEl);
-        }
-        
-        // 更新集合完成度
-        const completionRate = Math.floor((collectedFlowers / totalFlowers) * 100);
-        
-        // 添加集合完成度指示器
-        const completionEl = document.createElement('div');
-        completionEl.className = 'mt-4 text-center text-sm';
-        completionEl.innerHTML = `
-          <div class="text-gray-600 mb-1">收集进度: ${collectedFlowers}/${totalFlowers} (${completionRate}%)</div>
-          <div class="w-full bg-gray-200 rounded-full h-2">
-            <div class="bg-gradient-to-r from-pink-500 to-purple-600 h-2 rounded-full" style="width: ${completionRate}%"></div>
-          </div>
-        `;
-        collectionEl.appendChild(completionEl);
-      }
-      
-      // 显示花卉详情模态框
-      function showFlowerDetail(flower) {
-        // 创建模态框
-        const modal = document.createElement('div');
-        modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4';
-        
-        // 模态框内容
-        modal.innerHTML = `
-          <div class="bg-white rounded-xl max-w-md w-full p-6 relative flower-box">
-            <button class="absolute top-2 right-2 text-gray-400 hover:text-gray-600">
-              <i class="fas fa-times"></i>
-            </button>
-            <div class="text-center">
-              <div class="w-40 h-40 mx-auto mb-4 rounded-full shadow overflow-hidden">
-                <img src="https://source.unsplash.com/featured/?flower,${flower.image}" alt="${flower.name}" class="w-full h-full object-cover">
-              </div>
-              <div class="relative inline-block">
-                <span class="absolute -top-3 right-0 px-2 py-1 rounded-full text-white text-xs rarity-${flower.rarity}">
-                  ${flower.rarity === 'common' ? '普通' : flower.rarity === 'uncommon' ? '稀有' : flower.rarity === 'rare' ? '珍稀' : '传说'}
-                </span>
-                <h3 class="text-2xl font-semibold text-gray-800">${flower.name}</h3>
-                <p class="text-sm italic text-gray-500 mb-2">${flower.latinName}</p>
-              </div>
-              <p class="text-sm text-gray-600 mb-4">${flower.description}</p>
-              <div class="grid grid-cols-2 gap-3 text-sm">
-                <div class="bg-pink-50 p-2 rounded">
-                  <div class="font-medium text-pink-800">花语</div>
-                  <div>${flower.meaning}</div>
-                </div>
-                <div class="bg-purple-50 p-2 rounded">
-                  <div class="font-medium text-purple-800">颜色</div>
-                  <div>${flower.color}</div>
-                </div>
-                <div class="bg-blue-50 p-2 rounded col-span-2">
-                  <div class="font-medium text-blue-800">获得时间</div>
-                  <div>${new Date(history.find(h => h.id === flower.id)?.date || new Date()).toLocaleDateString()}</div>
-                </div>
-              </div>
-              <button class="mt-4 btn-glow px-4 py-2 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 text-white text-sm">
-                分享到朋友圈
-              </button>
-            </div>
-          </div>
-        `;
-        
-        // 关闭模态框的点击事件
-        const closeBtn = modal.querySelector('button');
-        closeBtn.addEventListener('click', () => {
-          document.body.removeChild(modal);
+        // 页面加载时初始化
+        window.addEventListener('load', function() {
+            initLocalStorage();
+            updateHistoryDisplay();
+            
+            // 暂时移除每日限制，方便测试
+            // 检查是否今天已经开过盒子
+            // if (checkIfOpenedToday()) {
+            //     giftBox.classList.add('disabled');
+            // }
+            
+            // 添加调试信息
+            console.log("页面加载完成，初始化成功");
+            console.log("礼盒元素：", giftBox);
         });
-        
-        // 点击外部关闭
-        modal.addEventListener('click', function(e) {
-          if(e.target === modal) {
-            document.body.removeChild(modal);
-          }
-        });
-        
-        document.body.appendChild(modal);
-      }
-      
-      // 渲染历史记录
-      function renderHistory() {
-        // 清空现有内容
-        historyEl.innerHTML = '';
-        
-        // 只显示最近5条记录
-        const recentHistory = history.slice(0, 5);
-        
-        if(recentHistory.length === 0) {
-          historyEl.innerHTML = '<div class="text-center text-gray-500 py-4">还没有开启记录哦</div>';
-          return;
-        }
-        
-        recentHistory.forEach(entry => {
-          const entryEl = document.createElement('div');
-          entryEl.className = 'bg-white rounded-lg p-3 shadow flex items-center space-x-3 transform transition-all duration-300 hover:shadow-md';
-          
-          // 格式化日期
-          const date = new Date(entry.date);
-          const today = new Date();
-          const yesterday = new Date(today);
-          yesterday.setDate(yesterday.getDate() - 1);
-          
-          let dateText;
-          if(date.toDateString() === today.toDateString()) {
-            dateText = '今天';
-          } else if(date.toDateString() === yesterday.toDateString()) {
-            dateText = '昨天';
-          } else {
-            dateText = date.toLocaleDateString();
-          }
-          
-          entryEl.innerHTML = `
-            <div class="w-12 h-12 rounded-full overflow-hidden bg-pink-100 flex-shrink-0">
-              <img src="https://source.unsplash.com/featured/?flower,${entry.image}" alt="${entry.name}" class="w-full h-full object-cover">
-            </div>
-            <div class="flex-grow">
-              <div class="flex justify-between">
-                <div class="font-medium">${entry.name}</div>
-                <div class="text-xs text-gray-500">${dateText}</div>
-              </div>
-              <div class="text-xs text-gray-600">${entry.meaning}</div>
-            </div>
-          `;
-          
-          // 点击查看详情
-          entryEl.addEventListener('click', () => {
-            showFlowerDetail(entry);
-          });
-          
-          historyEl.appendChild(entryEl);
-        });
-      }
-      
-      // 初始化
-      loadLocalData();
-      
-      // 注册事件监听
-      openBtn.addEventListener('click', openBox);
-      resetBtn.addEventListener('click', resetBox);
-      
-      // 也可以点击盲盒区域开启
-      flowerReveal.addEventListener('click', function() {
-        if(canOpen && !flowerReveal.classList.contains('open')) {
-          openBox();
-        }
-      });
-      
-      // 每天自动重置状态
-      function checkDailyReset() {
-        const lastOpenDate = localStorage.getItem('lastOpenDate');
-        const today = new Date().toDateString();
-        
-        if(lastOpenDate !== today && !canOpen) {
-          canOpen = true;
-          updateStatusDisplay();
-          countdownEl.classList.add('hidden');
-        }
-      }
-      
-      // 每分钟检查一次重置状态
-      setInterval(checkDailyReset, 60000);
-      checkDailyReset();
-    });
-  </script>
-</body>
-</html>
