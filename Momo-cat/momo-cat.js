@@ -7,17 +7,21 @@ document.addEventListener('DOMContentLoaded', function() {
     const resetBtn = document.getElementById("resetBtn");
 
     const earAudio = document.getElementById("earAudio");
+    const earAudio2 = document.getElementById("earAudio2");
     const bellyAudio = document.getElementById("bellyAudio");
+    const bellyAudio2 = document.getElementById("bellyAudio2");
     const pawAudio = document.getElementById("pawAudio");
+    const pawAudio1 = document.getElementById("pawAudio1");
+    const pawAudio2 = document.getElementById("pawAudio2");
 
     // 将所有音频放入数组
-    const audioList = [earAudio, bellyAudio, pawAudio];
+    const audioList = [earAudio, earAudio2, bellyAudio, bellyAudio2, pawAudio, pawAudio2];
 
     // 播放声音并做随机动画
     function playSoundAndAnimate(audioEl) {
         audioEl.currentTime = 0;
         audioEl.play();
-        // 随机旋转 -10~10度，随机缩放 1~1.2
+        // 随机旋转 -30~30度，随机缩放 1~1+2
         const deg = (Math.random() - 0.5) * 60;
         const scale = 1 + Math.random() * 2;
         cat.style.transition = "transform 0.3s ease";
