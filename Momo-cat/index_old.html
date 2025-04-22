@@ -12,9 +12,6 @@
     <!-- Font Awesome 图标库 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
         integrity="sha512-p1CmQ1WcW1+..." crossorigin="anonymous" referrerpolicy="no-referrer" />
-        
-    <!-- 引用外部 JavaScript 文件 -->
-    <script src="momo-cat.js"></script>
 </head>
 
 <body class="bg-pink-50 flex items-center justify-center min-h-screen p-4">
@@ -79,6 +76,59 @@
     <audio id="bellyAudio" src="assets/belly.m4a"></audio>
     <audio id="pawAudio" src="assets/paw.m4a"></audio>
 
+    <!-- 少量 JS 交互逻辑 -->
+    <script>
+        // 获取 DOM 元素
+        const cat = document.getElementById("momoCat");
+        const earBtn = document.getElementById("ear");
+        const bellyBtn = document.getElementById("belly");
+        const pawBtn = document.getElementById("paw");
+        const resetBtn = document.getElementById("resetBtn");
+
+        const earAudio = document.getElementById("earAudio");
+        const bellyAudio = document.getElementById("bellyAudio");
+        const pawAudio = document.getElementById("pawAudio");
+
+        // 播放声音并做随机动画
+        function playSoundAndAnimate(audioEl) {
+            audioEl.currentTime = 0;
+            audioEl.play();
+            // 随机旋转 -10~10度，随机缩放 1~1.2
+            const deg = (Math.random() - 0.5) * 60;
+            const scale = 1 + Math.random() * 2;
+            cat.style.transition = "transform 0.3s ease";
+            cat.style.transform = `rotate(${deg}deg) scale(${scale})`;
+            // 300ms 后复位
+            setTimeout(() => {
+                cat.style.transform = "";
+            }, 300);
+        }
+
+        // // 绑定事件
+        // earBtn.addEventListener("click", () => playSoundAndAnimate(earAudio));
+        // bellyBtn.addEventListener("click", () => playSoundAndAnimate(bellyAudio));
+        // pawBtn.addEventListener("click", () => playSoundAndAnimate(pawAudio));
+
+        // 将所有音频放入数组
+        const audioList = [earAudio, bellyAudio, pawAudio];
+
+        // 给所有热点按钮绑定同一个事件，随机播放一种声音
+        [earBtn, bellyBtn, pawBtn].forEach(btn => {
+            btn.addEventListener("click", () => {
+                // 随机选择一个音频
+                const randomAudio = audioList[Math.floor(Math.random() * audioList.length)];
+                playSoundAndAnimate(randomAudio);
+            });
+        });
+
+        // 切换躺/站
+        resetBtn.addEventListener("click", () => {
+            const lying = /lying/.test(cat.src);
+            cat.src = lying
+                ? "assets/momo_cat_standing.png"
+                : "assets/momo_cat_lying.png";
+        });
+    </script>
 </body>
 
 </html>
