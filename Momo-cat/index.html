@@ -55,7 +55,7 @@
             <!-- 尾巴 -->
             <button id="tail"
                 class="absolute bottom-12 right-4 w-16 h-16 bg-transparent hover:bg-pink-100 rounded-full transition-colors"></button>
-            </div>
+        </div>
 
         <!-- 控制按钮 & 输入框 -->
         <div class="mt-6 space-y-4">
@@ -104,12 +104,23 @@
             }, 300);
         }
 
-        // 绑定事件
-        earBtn.addEventListener("click", () => playSoundAndAnimate(earAudio));
-        bellyBtn.addEventListener("click", () =>
-            playSoundAndAnimate(bellyAudio)
-        );
-        pawBtn.addEventListener("click", () => playSoundAndAnimate(pawAudio));
+        // // 绑定事件
+        // earBtn.addEventListener("click", () => playSoundAndAnimate(earAudio));
+        // bellyBtn.addEventListener("click", () => playSoundAndAnimate(bellyAudio));
+        // pawBtn.addEventListener("click", () => playSoundAndAnimate(pawAudio));
+
+        // 将所有音频放入数组
+        const audioList = [earAudio, bellyAudio, pawAudio];
+
+        // 给所有热点按钮绑定同一个事件，随机播放一种声音
+        [earBtn, bellyBtn, pawBtn].forEach(btn => {
+            btn.addEventListener("click", () => {
+                // 随机选择一个音频
+                const randomAudio = audioList[Math.floor(Math.random() * audioList.length)];
+                playSoundAndAnimate(randomAudio);
+            });
+        });
+
 
         // 切换躺/站
         resetBtn.addEventListener("click", () => {
