@@ -2,3 +2,7 @@
 Thumbs.db
 Desktop.ini
 .vscode/
+node_modules
+_res/ignore/
+dist/dist
+.idea/
