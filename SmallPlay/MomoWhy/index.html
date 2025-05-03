@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>魔魔的为什么</title>
+
+    <!-- 引入 seedrandom 库（可选，用于固定随机种子） -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/seedrandom/3.0.5/seedrandom.min.js"></script>
+
+    <!-- 引入魔魔的why函数 -->
+    <script src="momo-why.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>魔魔的十万个为什么</h1>
+        <button onclick="showWhy()">为什么？</button>
+        <button onclick="showChain()">深入追问</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const momoWhy = new MomoWhy();
+
+        function showWhy() {
+            document.getElementById('result').innerHTML = momoWhy.why();
+        }
+
+        function showChain() {
+            const chain = momoWhy.whyChain(4);
+            let html = '';
+            chain.forEach(item => {
+                html += `<p><strong>Q:</strong> ${item.Q}</p>`;
+                html += `<p><strong>A:</strong> ${item.A}</p>`;
+                html += '<hr>';
+            });
+            document.getElementById('result').innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

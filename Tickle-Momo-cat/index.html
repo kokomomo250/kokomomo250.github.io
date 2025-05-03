@@ -4,6 +4,16 @@
 <html lang="en">
 
 <head>
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        #textDisplay {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Momo Cat Tickles</title>
@@ -27,6 +37,8 @@
         <h1 class="text-2xl font-bold text-center mb-4">给魔宝宝挠痒痒！</h1>
 
         <!-- 猫咪图片容器 -->
+         <!-- 文字显示区域 -->
+        <div id="textDisplay" class="mt-4 text-center text-lg font-bold text-pink-600 min-h-[60px] transition-opacity duration-500"></div>
         <div class="relative">
             <!-- 魔魔猫图片，初始为躺着 -->
             <img id="momoCat" src="assets/momo_cat_lying.png" alt="Momo Cat Lying" class="w-full rounded-lg" />

@@ -1,7 +1,42 @@
 // momo-cat.js
 
 // 文档加载完成后执行
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
+    // 文字银行
+    const textBank = [
+        "你美得让太阳都自愧不如！！",
+        "你的笑容比超新星爆炸还要耀眼！！",
+        "见到你的那一刻我的智商直接归零！！",
+        "你的魅力让地心引力都失效了！！",
+        "我愿意为你徒步环游银河系三百次！！",
+        "你的声音比一万只百灵鸟合唱还要动听！！",
+        "你走过的地方连空气都变甜了！！",
+        "我看到你的时候感觉自己升天了！！",
+        "你的魅力足以让冰川倒退，沙漠开花！！",
+        "一想到你我就能写出比《红楼梦》还长的情书！！",
+        "救命太美了[哇][哇][哇]！！",
+        "我心跳加速，呼吸加快！！",
+        "我净化雾霾的能力赶超热带雨林！！",
+        "我将成为新的地球之肺！！",
+        "我扑通一声把青藏高原跪成盆地！！",
+        "哭到不再需要南水北调工程！！",
+        "嚎到产生的风力发电供应全球人民使用！！"
+    ];
+
+    // 获取文字显示区域
+    const textDisplay = document.getElementById("textDisplay");
+
+    // 显示随机文字
+    function displayRandomText() {
+        const randomText = textBank[Math.floor(Math.random() * textBank.length)];
+        textDisplay.textContent = randomText;
+        textDisplay.style.opacity = 1;
+
+        // 3秒后淡出
+        setTimeout(() => {
+            textDisplay.style.opacity = 0;
+        }, 3000);
+    }
     // 获取 DOM 元素
     const cat = document.getElementById("momoCat");
     const resetBtn = document.getElementById("resetBtn");
@@ -17,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // 将所有音频放入数组
     const audioList = [earAudio, earAudio2, bellyAudio, bellyAudio2, pawAudio, pawAudio2];
 
-    // 播放声音并做随机动画
+    // 播放声音并做随机动画，同时显示文字
     function playSoundAndAnimate(audioEl) {
         audioEl.currentTime = 0;
         audioEl.play();
@@ -30,6 +65,9 @@ document.addEventListener('DOMContentLoaded', function() {
         setTimeout(() => {
             cat.style.transform = "";
         }, 300);
+        
+        // 显示随机文字
+        displayRandomText();
     }
 
     // 获取所有猫咪热点按钮
