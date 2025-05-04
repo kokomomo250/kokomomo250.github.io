@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +11,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-    
+
     <style>
         /* 自定义样式 */
         body {
@@ -19,24 +20,24 @@
             background-color: #0f172a;
             color: #e2e8f0;
         }
-        
+
         .glass-card {
             background: rgba(255, 255, 255, 0.05);
             backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             transition: all 0.3s ease;
         }
-        
+
         .glass-card:hover {
             transform: scale(1.02);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
-        
+
         .nav-link {
             position: relative;
             transition: all 0.3s ease;
         }
-        
+
         .nav-link::after {
             content: '';
             position: absolute;
@@ -47,32 +48,32 @@
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             transition: width 0.3s ease;
         }
-        
+
         .nav-link:hover::after {
             width: 100%;
         }
-        
+
         .input-focus:focus {
             border: none;
             outline: none;
             box-shadow: 0 0 0 2px #3b82f6, 0 0 0 4px #93c5fd;
         }
-        
+
         .btn {
             transition: all 0.3s ease;
         }
-        
+
         .btn:hover {
             transform: scale(1.05);
         }
-        
+
         .gradient-text {
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
-        
+
         .countdown-item {
             background: rgba(59, 130, 246, 0.1);
             border-radius: 12px;
@@ -81,7 +82,7 @@
             backdrop-filter: blur(5px);
             border: 1px solid rgba(59, 130, 246, 0.2);
         }
-        
+
         /* 波浪动画背景 */
         .wave-bg {
             position: absolute;
@@ -90,7 +91,7 @@
             overflow: hidden;
             z-index: -1;
         }
-        
+
         .wave {
             position: absolute;
             bottom: 0;
@@ -101,30 +102,41 @@
             background-size: 1440px 100px;
             animation: wave-animation 12s linear infinite;
         }
-        
+
         .wave:nth-child(2) {
             bottom: 0;
             opacity: 0.7;
             animation: wave-animation 8s linear infinite;
         }
-        
+
         .wave:nth-child(3) {
             bottom: 0;
             opacity: 0.5;
             animation: wave-animation-reverse 10s linear infinite;
         }
-        
+
         @keyframes wave-animation {
-            0% { background-position-x: 0; }
-            100% { background-position-x: 1440px; }
+            0% {
+                background-position-x: 0;
+            }
+
+            100% {
+                background-position-x: 1440px;
+            }
         }
-        
+
         @keyframes wave-animation-reverse {
-            0% { background-position-x: 1440px; }
-            100% { background-position-x: 0; }
+            0% {
+                background-position-x: 1440px;
+            }
+
+            100% {
+                background-position-x: 0;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- 波浪背景 -->
     <div class="wave-bg">
@@ -132,15 +144,15 @@
         <div class="wave"></div>
         <div class="wave"></div>
     </div>
-    
+
     <!-- 主内容区 -->
     <div class="container mx-auto px-4 py-12">
         <!-- 头部介绍 -->
         <div class="intro flex flex-col items-center justify-center min-h-screen text-center">
             <div class="mb-12 glass-card p-8 rounded-3xl w-full max-w-3xl mx-auto">
                 <h1 class="text-5xl md:text-7xl font-bold mb-4 gradient-text">魔魔 & 叩叩</h1>
-                <h2 class="text-2xl md:text-3xl font-light mb-8">我们的第一个周年</h2>
-                
+                <h2 class="text-2xl md:text-3xl font-light mb-8">我俩的下一个周年纪念日倒计时</h2>
+
                 <!-- 倒计时 -->
                 <div id="countdown" class="flex flex-wrap justify-center gap-4 my-8">
                     <div class="countdown-item">
@@ -160,59 +172,68 @@
                         <div class="text-sm text-gray-400">秒</div>
                     </div>
                 </div>
-                
+
                 <p class="text-gray-300 mb-8">这是我们共同的旅程，记录着每一个特别的时刻。</p>
-                
-                <img src="https://source.unsplash.com/1200x600/?love,anniversary" alt="周年纪念" class="rounded-xl w-full h-64 object-cover mb-8">
+
+                <img src="assets/KM-love-anniversary.png" alt="周年纪念"
+                    class="rounded-xl w-full h-64 object-cover mb-8">
             </div>
         </div>
-        
+
         <!-- 导航链接 -->
         <div class="mt-12 mb-24">
             <h3 class="text-2xl font-semibold mb-8 text-center gradient-text">我们的回忆之旅</h3>
-            
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- 链接卡片 -->
                 <a href="" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-blue-500">bookmark</span>
                     <div>
-                        <h4 class="text-lg font-medium group-hover:text-blue-400 transition-colors">"叩叩饲养员"：魔魔献给我的微信公众号</h4>
+                        <h4 class="text-lg font-medium group-hover:text-blue-400 transition-colors">"叩叩饲养员"：魔魔献给我的微信公众号
+                        </h4>
                         <p class="text-sm text-gray-400">微信公众号</p>
                     </div>
                 </a>
-                
-                <a href="https://ktwugoat.feishu.cn/docx/MNpFdT7oYoTdblxdp76c1C5fnfe" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
+
+                <a href="https://ktwugoat.feishu.cn/docx/MNpFdT7oYoTdblxdp76c1C5fnfe"
+                    class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-purple-500">favorite</span>
                     <div>
-                        <h4 class="text-lg font-medium group-hover:text-purple-400 transition-colors">要真正的保护好魔：态度和能力</h4>
+                        <h4 class="text-lg font-medium group-hover:text-purple-400 transition-colors">要真正的保护好魔：态度和能力
+                        </h4>
                         <p class="text-sm text-gray-400">飞书文档</p>
                     </div>
                 </a>
-                
-                <a href="https://ktwugoat.feishu.cn/base/DC5zbU8XJaZBVXs10iaczSQMnAf?table=tblSVavqA5sbXpyu&view=vewVPTZ0aX" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
+
+                <a href="https://ktwugoat.feishu.cn/base/DC5zbU8XJaZBVXs10iaczSQMnAf?table=tblSVavqA5sbXpyu&view=vewVPTZ0aX"
+                    class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-pink-500">collections_bookmark</span>
                     <div>
                         <h4 class="text-lg font-medium group-hover:text-pink-400 transition-colors">叩叩魔魔的画饼合集</h4>
                         <p class="text-sm text-gray-400">飞书多维表格</p>
                     </div>
                 </a>
-                
-                <a href="https://ktwugoat.feishu.cn/docx/N9Xody6cOoUDfZx2spRcrwtknec" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
+
+                <a href="https://ktwugoat.feishu.cn/docx/N9Xody6cOoUDfZx2spRcrwtknec"
+                    class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-green-500">event_note</span>
                     <div>
-                        <h4 class="text-lg font-medium group-hover:text-green-400 transition-colors">KoMo-01 叩叩魔魔过家家</h4>
+                        <h4 class="text-lg font-medium group-hover:text-green-400 transition-colors">KoMo-01 叩叩魔魔过家家
+                        </h4>
                         <p class="text-sm text-gray-400">2024年2月22日-2025年2月22日</p>
                     </div>
                 </a>
-                
-                <a href="https://ktwugoat.feishu.cn/docx/VCf2dnEG6oa0jLxguNrcl2UAnif" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
+
+                <a href="https://ktwugoat.feishu.cn/docx/VCf2dnEG6oa0jLxguNrcl2UAnif"
+                    class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-yellow-500">next_plan</span>
                     <div>
-                        <h4 class="text-lg font-medium group-hover:text-yellow-400 transition-colors">KoMo-02 叩叩魔魔过家家</h4>
+                        <h4 class="text-lg font-medium group-hover:text-yellow-400 transition-colors">KoMo-02 叩叩魔魔过家家
+                        </h4>
                         <p class="text-sm text-gray-400">2025年2月23日-2026年2月22日</p>
                     </div>
                 </a>
-                
+
                 <a href="https://kokomomo250.github.io" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-red-500">web</span>
                     <div>
@@ -220,123 +241,136 @@
                         <p class="text-sm text-gray-400">GitHub Pages</p>
                     </div>
                 </a>
-                
-                <a href="https://github.com/kokomomo250/kokomomo250.github.io/tree/main" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
+
+                <a href="https://github.com/kokomomo250/kokomomo250.github.io/tree/main"
+                    class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-blue-500">code</span>
                     <div>
                         <h4 class="text-lg font-medium group-hover:text-blue-400 transition-colors">魔可以和叩一起编辑的网站</h4>
                         <p class="text-sm text-gray-400">GitHub 仓库</p>
                     </div>
                 </a>
-                
-                <a href="https://kokomomo250.github.io/SmallPlay/MomoMenu.html" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
+
+                <a href="https://kokomomo250.github.io/SmallPlay/MomoMenu.html"
+                    class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-green-500">restaurant</span>
                     <div>
                         <h4 class="text-lg font-medium group-hover:text-green-400 transition-colors">魔魔和叩叩美食推荐</h4>
                         <p class="text-sm text-gray-400">美食清单</p>
                     </div>
                 </a>
-                
+
                 <a href="http://163cn.tv/CaW5oCC" class="glass-card p-6 rounded-xl flex items-center gap-4 group">
                     <span class="material-icons text-purple-500">music_note</span>
                     <div>
-                        <h4 class="text-lg font-medium group-hover:text-purple-400 transition-colors">献给我的魔魔的音乐《for my momo》</h4>
+                        <h4 class="text-lg font-medium group-hover:text-purple-400 transition-colors">献给我的魔魔的音乐《for my
+                            momo》</h4>
                         <p class="text-sm text-gray-400">网易云音乐</p>
                     </div>
                 </a>
             </div>
         </div>
-        
+
         <!-- 照片墙 -->
         <div class="my-24">
             <h3 class="text-2xl font-semibold mb-8 text-center gradient-text">我们的美好瞬间</h3>
-            
+
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <img src="https://source.unsplash.com/300x300/?couple,love" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?date,romance" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?travel,together" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?gift,surprise" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?dinner,date" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?sunset,couple" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?flowers,gift" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
-                <img src="https://source.unsplash.com/300x300/?memories,together" alt="回忆照片" class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="assets/KM-love-anniversary.png" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="assets/KM-love-anniversary-1.png" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="assets/KM-love-anniversary-2.png" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="https://source.unsplash.com/300x300/?gift,surprise" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="https://source.unsplash.com/300x300/?dinner,date" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="https://source.unsplash.com/300x300/?sunset,couple" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="https://source.unsplash.com/300x300/?flowers,gift" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
+                <img src="https://source.unsplash.com/300x300/?memories,together" alt="回忆照片"
+                    class="rounded-xl w-full h-48 object-cover glass-card hover:scale-105 transition-all">
             </div>
         </div>
-        
+
         <!-- 留言板 -->
         <div class="my-24">
             <h3 class="text-2xl font-semibold mb-8 text-center gradient-text">留下祝福</h3>
-            
+
             <div class="glass-card p-6 rounded-xl max-w-2xl mx-auto">
                 <div class="mb-4">
                     <label for="name" class="block text-sm font-medium text-gray-400 mb-2">您的名字</label>
-                    <input type="text" id="name" class="w-full bg-slate-900 bg-opacity-50 rounded-lg p-3 text-white input-focus">
+                    <input type="text" id="name"
+                        class="w-full bg-slate-900 bg-opacity-50 rounded-lg p-3 text-white input-focus">
                 </div>
-                
+
                 <div class="mb-4">
                     <label for="message" class="block text-sm font-medium text-gray-400 mb-2">您的祝福</label>
-                    <textarea id="message" rows="4" class="w-full bg-slate-900 bg-opacity-50 rounded-lg p-3 text-white input-focus"></textarea>
+                    <textarea id="message" rows="4"
+                        class="w-full bg-slate-900 bg-opacity-50 rounded-lg p-3 text-white input-focus"></textarea>
                 </div>
-                
-                <button class="btn bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium">
+
+                <button
+                    class="btn bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-lg font-medium">
                     <span class="material-icons mr-2 text-sm">favorite</span>
                     发送祝福
                 </button>
             </div>
         </div>
-        
+
         <!-- 页脚 -->
         <footer class="mt-24 text-center text-gray-400 text-sm">
             <p>魔魔 & 叩叩 | 一周年纪念</p>
             <p class="mt-2">© 2025 - 永远在一起</p>
         </footer>
     </div>
-    
+
     <!-- JavaScript -->
     <script>
         // 倒计时功能
         function updateCountdown() {
-            // 设置周年纪念日时间
-            const anniversaryDate = new Date('2024-03-17T00:00:00').getTime();
-            const now = new Date().getTime();
+            const now = new Date();
+            const currentYear = now.getFullYear();
+            let anniversaryDate = new Date(currentYear, 2, 17); // March 17 of current year
+
+            // If this year's anniversary has passed, use next year
+            if (now > anniversaryDate) {
+                anniversaryDate = new Date(currentYear + 1, 2, 17);
+            }
+
             const timeLeft = anniversaryDate - now;
-            
-            // 计算时间
+
+            // Calculate time
             let days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
             let hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             let minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
             let seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            
-            // 如果已经过了周年日，则显示0
-            if (timeLeft < 0) {
-                days = 0;
-                hours = 0;
-                minutes = 0;
-                seconds = 0;
-            }
-            
-            // 更新页面显示
+
+            // Update display
             document.getElementById('days').textContent = days.toString().padStart(2, '0');
             document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
             document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
             document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
         }
-        
+
         // 初始化倒计时并每秒更新
         updateCountdown();
         setInterval(updateCountdown, 1000);
-        
+
         // 表单输入框聚焦效果
         const inputs = document.querySelectorAll('.input-focus');
         inputs.forEach(input => {
             input.addEventListener('focus', () => {
                 input.style.boxShadow = '0 0 0 2px #3b82f6, 0 0 0 4px #93c5fd';
             });
-            
+
             input.addEventListener('blur', () => {
                 input.style.boxShadow = 'none';
             });
         });
     </script>
 </body>
+
 </html>
