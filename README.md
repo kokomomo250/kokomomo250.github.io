@@ -17,7 +17,7 @@ Designed for my only Momo, she will be happy seeing this.
 ✨ 项目特色：
 
 * 👆 可点击的萌物互动（比如挠魔猫猫痒痒）
-* 💬 模拟对话小剧场（Kok o变NPC陪你聊天）
+* 💬 模拟对话小剧场（Koko变NPC陪你聊天）
 * 🎈 爱心气球、节日特效、纪念时刻倒计时
 * 🧠 小测试、小模拟器（Koko用 JS 做的脑筋急转弯）
 * 🖼️ 充满我们回忆的插图与彩蛋
