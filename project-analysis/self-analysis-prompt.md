@@ -1,4 +1,4 @@
-Based on the attached file analysis from my project, create a comprehensive self_analysis.md document. The analysis should:
+根据这些提示来给我给魔魔的网站做一个爱心版readme .md Based on the attached file analysis from my project. The analysis should:
 
 1. **Project Overview**
    - Identify the project type and primary programming language(s)

@@ -6,4 +6,7 @@ chmod +x generate-file-analysis.sh
 
 It will generate ''file_analysis.txt''
 
-# Then use file_analysis.txt and the self-analysis-prompt.md to Gemini to get the README.md
+# Then upload 
+file_analysis.txt and 
+self-analysis-prompt.md 
+to Gemini to get the self_analysis.md
