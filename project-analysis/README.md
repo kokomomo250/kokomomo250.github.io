@@ -9,4 +9,4 @@ It will generate ''file_analysis.txt''
 # Then upload 
 file_analysis.txt and 
 self-analysis-prompt.md 
-to Gemini to get the self_analysis.md
+to GPT to get the self_analysis.md
