@@ -13,7 +13,15 @@ echo "" >> "$output_file"
 analyze_file() {
     local file="$1"
     local lines=$(wc -l < "$file" 2>/dev/null)
+        
+    # Skip .js files
+    if [[ "$file" == *.js ]]; then
+        echo "  Type: JavaScript file (skipped)" >> "$output_file"
+        return
+    fi
     
+    local lines=$(wc -l < "$file" 2>/dev/null)
+
     # Skip binary files
     if file -b --mime-encoding "$file" | grep -q binary; then
         echo "  Type: Binary file" >> "$output_file"
